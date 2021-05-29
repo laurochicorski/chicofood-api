@@ -2,9 +2,7 @@ package com.chicorski.chicofoodapi.di.service;
 
 import com.chicorski.chicofoodapi.di.modelo.Cliente;
 import com.chicorski.chicofoodapi.di.notificacao.Notificador;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AtivicaoClienteService {
 
     private Notificador notificador;
