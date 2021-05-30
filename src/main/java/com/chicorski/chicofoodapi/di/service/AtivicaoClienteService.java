@@ -5,17 +5,14 @@ import com.chicorski.chicofoodapi.di.notificacao.NivelUrgencia;
 import com.chicorski.chicofoodapi.di.notificacao.Notificador;
 import com.chicorski.chicofoodapi.di.notificacao.TipoNotificador;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class AtivicaoClienteService {
 
 
     @Autowired
-    @TipoNotificador(NivelUrgencia.NORNAL)
+    @TipoNotificador(NivelUrgencia.SEM_URGENCIA)
     private Notificador notificador;
 
     public void ativar(Cliente cliente) {
