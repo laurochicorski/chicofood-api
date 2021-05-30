@@ -1,11 +1,13 @@
 package com.chicorski.chicofoodapi.di.notificacao;
 
 import com.chicorski.chicofoodapi.di.modelo.Cliente;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-@Primary
+
 @Component
+@Qualifier("urgente")
 public class NotificadorSMS implements Notificador {
 
     public void notificar(Cliente cliente, String mensagem) {
