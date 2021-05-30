@@ -4,7 +4,7 @@ import com.chicorski.chicofoodapi.di.modelo.Cliente;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Qualifier("normal")
+@TipoNotificador(NivelUrgencia.NORNAL)
 @Component
 public class NotificadorEmail implements Notificador {
 

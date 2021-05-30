@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 
+@TipoNotificador(NivelUrgencia.URGENTE)
 @Component
-@Qualifier("urgente")
 public class NotificadorSMS implements Notificador {
 
     public void notificar(Cliente cliente, String mensagem) {
