@@ -3,15 +3,17 @@ package com.chicorski.chicofoodapi.domain.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tab_cozinhas")
 public class Cozinha {
 
     @Id
     private Long id;
 
-    @Column
+    @Column(name = "nom_cozinha", length = 30)
     private String nome;
 
     public Long getId() {
