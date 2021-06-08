@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@JsonRootName("cozinha")
 public class Cozinha {
 
     @EqualsAndHashCode.Include
