@@ -42,4 +42,10 @@ public class CozinhaController {
                 .notFound()
                 .build();
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cozinha adicionar(@RequestBody  Cozinha cozinha) {
+        return cozinhaRepository.salvar(cozinha);
+    }
 }
