@@ -1,6 +1,8 @@
 package com.chicorski.chicofoodapi.api.controller;
 
 import com.chicorski.chicofoodapi.api.model.CozinhasXmlWrapper;
+import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
+import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCozinhaService;
@@ -75,26 +77,19 @@ public class CozinhaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Cozinha> remover(@PathVariable Long id) {
         try {
-            Cozinha cozinha = cozinhaRepository.buscar(id);
+            cadastroCozinha.excluir(id);
 
-            if (cozinha != null) {
-                cozinhaRepository.remover(cozinha);
-
-                return ResponseEntity
-                        .noContent()
-                        .build();
-            }
-
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity
                     .notFound()
                     .build();
-        } catch (DataIntegrityViolationException e) {
+        } catch (EntidadeEmUsoException e) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .build();
         }
-
-
-
     }
 }
