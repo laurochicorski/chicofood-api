@@ -1,6 +1,5 @@
 package com.chicorski.chicofoodapi.api.controller;
 
-import com.chicorski.chicofoodapi.api.model.CozinhasXmlWrapper;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
@@ -8,14 +7,10 @@ import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -31,11 +26,6 @@ public class CozinhaController {
     @GetMapping
     public List<Cozinha> listar() {
         return cozinhaRepository.listar();
-    }
-
-    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-    public CozinhasXmlWrapper listarXML() {
-        return new CozinhasXmlWrapper(cozinhaRepository.listar());
     }
 
     @GetMapping("/{cozinhaId}")
@@ -62,11 +52,9 @@ public class CozinhaController {
         Cozinha cozinhaAtual = cozinhaRepository.buscar(id);
 
         if (cozinhaAtual != null) {
-
-//        cozinhaAtual.setNome(cozinha.getNome());
             BeanUtils.copyProperties(cozinha, cozinhaAtual);
 
-            cozinhaRepository.salvar(cozinha);
+            cadastroCozinha.salvar(cozinha);
 
             return ResponseEntity.ok(cozinhaAtual);
         }
