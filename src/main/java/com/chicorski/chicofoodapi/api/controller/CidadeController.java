@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cidades")
@@ -26,15 +27,15 @@ public class CidadeController {
 
     @GetMapping
     private List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     @GetMapping("/{id}")
     private ResponseEntity<Cidade> buscar(@PathVariable Long id) {
-        Cidade cidade = cidadeRepository.buscar(id);
+        Optional<Cidade> cidade = cidadeRepository.findById(id);
 
-        if (cidade != null) {
-            return ResponseEntity.ok().body(cidade);
+        if (cidade.isPresent()) {
+            return ResponseEntity.ok().body(cidade.get());
         }
 
         return ResponseEntity.notFound().build();
@@ -48,14 +49,14 @@ public class CidadeController {
 
     @PutMapping("/{id}")
     private ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Cidade cidadeAtual = cidadeRepository.buscar(id);
+        Optional<Cidade> cidadeAtual = cidadeRepository.findById(id);
 
-        if (cidadeAtual != null) {
+        if (cidadeAtual.isPresent()) {
             try {
-                BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+                BeanUtils.copyProperties(cidade, cidadeAtual.get(), "id");
 
-                cidadeAtual = cadastroCidade.salvar(cidadeAtual);
-                return ResponseEntity.ok(cidadeAtual);
+                Cidade cidadeSalva = cadastroCidade.salvar(cidadeAtual.get());
+                return ResponseEntity.ok(cidadeSalva);
             } catch (EntidadeNaoEncontradaException e) {
                 return ResponseEntity
                         .badRequest()
