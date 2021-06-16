@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +29,6 @@ public class Produto {
     private Boolean ativo;
 
     @ManyToOne
-    @JoinColumn(name="restaurante_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Restaurante restaurante;
 }
