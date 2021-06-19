@@ -31,14 +31,8 @@ public class CidadeController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Cidade> buscar(@PathVariable Long id) {
-        Optional<Cidade> cidade = cidadeRepository.findById(id);
-
-        if (cidade.isPresent()) {
-            return ResponseEntity.ok().body(cidade.get());
-        }
-
-        return ResponseEntity.notFound().build();
+    private Cidade buscar(@PathVariable Long id) {
+        return cadastroCidade.buscarOuFalhar(id);
     }
 
     @PostMapping
@@ -48,39 +42,16 @@ public class CidadeController {
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
-        Optional<Cidade> cidadeAtual = cidadeRepository.findById(id);
+    private Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
+        Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(id);
+        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+        return cadastroCidade.salvar(cidadeAtual);
 
-        if (cidadeAtual.isPresent()) {
-            try {
-                BeanUtils.copyProperties(cidade, cidadeAtual.get(), "id");
-
-                Cidade cidadeSalva = cadastroCidade.salvar(cidadeAtual.get());
-                return ResponseEntity.ok(cidadeSalva);
-            } catch (EntidadeNaoEncontradaException e) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(e.getMessage());
-            }
-        }
-
-        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<?> remover(@PathVariable Long id) {
-        try {
-            cadastroCidade.excluir(id);
-
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity
-                    .notFound()
-                    .build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void remover(@PathVariable Long id) {
+        cadastroCidade.excluir(id);
     }
 }

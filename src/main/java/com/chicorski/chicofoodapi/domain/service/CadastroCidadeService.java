@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CadastroCidadeService {
 
+    private static final String MSG_CIDADE_NAO_ENCONTRADA = "Não existe Cidade com o código: %d";
+    private static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe Estado com o código: %d";
+    private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removidade, pois está em uso";
+
     @Autowired
     private CidadeRepository cidadeRepository;
 
@@ -25,7 +29,7 @@ public class CadastroCidadeService {
 
         Estado estado = estadoRepository.findById(estadoId)
                 .orElseThrow(() ->new EntidadeNaoEncontradaException(
-                        String.format("Não existe Estado com o código: %d", estadoId)));
+                        String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId)));
 
         cidade.setEstado(estado);
 
@@ -37,10 +41,15 @@ public class CadastroCidadeService {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(
-                    String.format("Não existe Cidade com o código: %d", id ));
+                    String.format(MSG_CIDADE_NAO_ENCONTRADA, id ));
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    String.format("Cidade de código %d não pode ser removidade, pois está em uso", id));
+                    String.format(MSG_CIDADE_EM_USO, id));
         }
+    }
+
+    public Cidade buscarOuFalhar(Long id) {
+        return cidadeRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id)));
     }
 }
