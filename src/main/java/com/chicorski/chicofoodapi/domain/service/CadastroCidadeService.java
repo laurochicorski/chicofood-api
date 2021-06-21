@@ -1,7 +1,9 @@
 package com.chicorski.chicofoodapi.domain.service;
 
+import com.chicorski.chicofoodapi.domain.exception.CidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.chicorski.chicofoodapi.domain.exception.EstadoNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.model.Estado;
 import com.chicorski.chicofoodapi.domain.repository.CidadeRepository;
@@ -28,8 +30,7 @@ public class CadastroCidadeService {
         Long estadoId = cidade.getEstado().getId();
 
         Estado estado = estadoRepository.findById(estadoId)
-                .orElseThrow(() ->new EntidadeNaoEncontradaException(
-                        String.format(MSG_ESTADO_NAO_ENCONTRADO, estadoId)));
+                .orElseThrow(() ->new EstadoNaoEncontradaException(estadoId));
 
         cidade.setEstado(estado);
 
@@ -40,8 +41,7 @@ public class CadastroCidadeService {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format(MSG_CIDADE_NAO_ENCONTRADA, id ));
+            throw new CidadeNaoEncontradaException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     String.format(MSG_CIDADE_EM_USO, id));
@@ -50,6 +50,6 @@ public class CadastroCidadeService {
 
     public Cidade buscarOuFalhar(Long id) {
         return cidadeRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id)));
+                .orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }
 }

@@ -1,6 +1,7 @@
 package com.chicorski.chicofoodapi.domain.service;
 
-import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
+import com.chicorski.chicofoodapi.domain.exception.CozinhaNaoEncontradaException;
+import com.chicorski.chicofoodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
@@ -21,8 +22,7 @@ public class CadastroRestauranteService {
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, cozinhaId)));
+                .orElseThrow(() -> new CozinhaNaoEncontradaException(cozinhaId));
 
 
         restaurante.setCozinha(cozinha);
@@ -32,7 +32,7 @@ public class CadastroRestauranteService {
 
     public Restaurante buscarOuFalhar(Long id) {
         return restauranteRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id)));
+                .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
 
 

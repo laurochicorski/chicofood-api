@@ -1,7 +1,7 @@
 package com.chicorski.chicofoodapi.domain.service;
 
+import com.chicorski.chicofoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
-import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class CadastroCozinhaService {
         try {
             cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NAO_ENCONTRADA, id));
+            throw new CozinhaNaoEncontradaException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format(MSG_COZINHA_EM_USO, id));
         }
@@ -34,6 +34,6 @@ public class CadastroCozinhaService {
 
     public Cozinha buscarOuFalhar(Long id) {
         return cozinhaRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NAO_ENCONTRADA, id)));
+                .orElseThrow(() -> new CozinhaNaoEncontradaException(id));
     }
 }
