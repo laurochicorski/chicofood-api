@@ -42,7 +42,7 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
+    public Cozinha atualizar(@PathVariable Long id, @RequestBody @Valid Cozinha cozinha) {
         Cozinha cozinhaAtual = cadastroCozinha.buscarOuFalhar(id);
         BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
         Cozinha cozinhaSalva =cadastroCozinha.salvar(cozinhaAtual);
