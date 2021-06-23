@@ -1,6 +1,6 @@
 package com.chicorski.chicofoodapi.domain.model;
 
-import com.chicorski.chicofoodapi.Groups;
+import com.chicorski.chicofoodapi.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

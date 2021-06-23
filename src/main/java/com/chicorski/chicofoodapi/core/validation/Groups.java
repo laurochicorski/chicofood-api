@@ -1,4 +1,4 @@
-package com.chicorski.chicofoodapi;
+package com.chicorski.chicofoodapi.core.validation;
 
 public interface Groups {
 
