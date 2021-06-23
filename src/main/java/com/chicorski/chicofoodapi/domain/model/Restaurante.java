@@ -28,7 +28,7 @@ public class Restaurante {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank(message = "Nome é obrigatorio")
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
