@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.domain.model;
 
+import com.chicorski.chicofoodapi.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,16 +26,16 @@ public class Restaurante {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank
+    @NotBlank(groups = Groups.CadastroRestaurante.class)
     @Column(nullable = false)
     private String nome;
 
-    @PositiveOrZero
+    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     @Valid
-    @NotNull
+    @NotNull(groups = Groups.CadastroRestaurante.class)
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
