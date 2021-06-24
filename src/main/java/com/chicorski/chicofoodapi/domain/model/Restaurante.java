@@ -1,7 +1,7 @@
 package com.chicorski.chicofoodapi.domain.model;
 
 import com.chicorski.chicofoodapi.core.validation.Groups;
-import com.chicorski.chicofoodapi.core.validation.TaxaFrete;
+import com.chicorski.chicofoodapi.core.validation.Multiplo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +34,8 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @TaxaFrete
+    @PositiveOrZero
+    @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
