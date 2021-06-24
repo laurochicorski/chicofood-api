@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.exceptionHandler;
 
+import com.chicorski.chicofoodapi.core.validation.ValidacaoException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
@@ -76,11 +77,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-        String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente";
         BindingResult bindingResult = ex.getBindingResult();
 
-        List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
+        Problem problem = createProblem(bindingResult);
+
+        return handleExceptionInternal(ex , problem, headers, status, request);
+    }
+
+    private Problem createProblem(BindingResult bindingResult) {
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente";
+
+        List<Problem.Object> problemObjects =  bindingResult.getAllErrors().stream()
                 .map(objectError -> {
                     String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
@@ -97,12 +105,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 })
                 .collect(Collectors.toList());
 
-        Problem problem = createProblemBuilder(HttpStatus.BAD_REQUEST, problemType, detail)
+        return createProblemBuilder(HttpStatus.BAD_REQUEST, problemType, detail)
                 .userMessage(detail)
                 .objects(problemObjects)
                 .build();
-
-        return handleExceptionInternal(ex , problem, headers, status, request);
     }
 
     private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -159,6 +165,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<?> handleValidacaoException(ValidacaoException ex, WebRequest request) {
+        BindingResult bindingResult = ex.getBindingResult();
+
+        Problem problem = createProblem(bindingResult);
+
+        return handleExceptionInternal(ex , problem, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
