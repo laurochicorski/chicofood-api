@@ -1,5 +1,7 @@
 package com.chicorski.chicofoodapi;
 
+import com.chicorski.chicofoodapi.domain.exception.CozinhaNaoEncontradaException;
+import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.service.CadastroCozinhaService;
 import org.junit.Test;
@@ -36,6 +38,16 @@ public class CadastroCozinhaIntegrationTest {
 		novaCozinha.setNome(null);
 
 		novaCozinha = cadastroCozinha.salvar(novaCozinha);
+	}
+
+	@Test(expected = EntidadeEmUsoException.class)
+	public void deveFalharQuandoExcluirCozinhaEmUso() {
+		cadastroCozinha.excluir(1l);
+	}
+
+	@Test(expected = CozinhaNaoEncontradaException.class)
+	public void deveFalharQuandoExcluirCozinhaInexistente() {
+		cadastroCozinha.excluir(100l);
 	}
 
 }
