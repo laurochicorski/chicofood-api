@@ -16,7 +16,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
 @RunWith(SpringRunner.class)
@@ -56,7 +56,6 @@ public class CadastroCozinhaIT {
 
     @Test
     public void deveConter4Cozinhas_QuandoConsultarCozinha() {
-
         given()
                 .accept(ContentType.JSON)
         .when()
@@ -75,6 +74,29 @@ public class CadastroCozinhaIT {
                 .post()
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
+        given()
+                .pathParam("id", 2)
+                .accept(ContentType.JSON)
+                .when()
+                .get("/{id}")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Brasileira"));
+    }
+
+    @Test
+    public void deveRetornarRespostaEStatus404_QuandoConsultarCozinhaInexistente() {
+        given()
+                .pathParam("id", 4)
+                .accept(ContentType.JSON)
+                .when()
+                .get("/{id}")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     private void prepararDados() {
