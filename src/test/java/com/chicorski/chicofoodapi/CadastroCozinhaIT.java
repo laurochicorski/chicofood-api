@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.util.DatabaseCleaner;
+import com.chicorski.chicofoodapi.util.ResourceUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.Before;
@@ -14,6 +15,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,6 +36,14 @@ public class CadastroCozinhaIT {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    private int quantidadeCozinhas;
+
+    private String jsonCorretoCozinhaChinesa;
+
+    private Cozinha cozinhaBrasileira;
+
+    private static final int COZINHA_ID_INEXISTENTE = 100;
 
     @Before
     public void setUp() {
@@ -55,19 +67,22 @@ public class CadastroCozinhaIT {
     }
 
     @Test
-    public void deveConter4Cozinhas_QuandoConsultarCozinha() {
+    public void deveConterQuantidadeDeCozinhas_QuandoConsultarCozinha() {
         given()
                 .accept(ContentType.JSON)
         .when()
                 .get()
         .then()
-                .body("", hasSize(2));
+                .body("", hasSize(quantidadeCozinhas));
     }
 
     @Test
     public void deveRetornarStatus201_QuandoCadastrarCozinha() {
+        jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource(
+                "/json/cozinha-chinesa.json");
+
         given()
-                .body("{\"nome\": \"Chinesa\"}")
+                .body(jsonCorretoCozinhaChinesa)
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .when()
@@ -79,19 +94,19 @@ public class CadastroCozinhaIT {
     @Test
     public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente() {
         given()
-                .pathParam("id", 2)
+                .pathParam("id", cozinhaBrasileira.getId())
                 .accept(ContentType.JSON)
                 .when()
                 .get("/{id}")
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .body("nome", equalTo("Brasileira"));
+                .body("nome", equalTo(cozinhaBrasileira.getNome()));
     }
 
     @Test
     public void deveRetornarRespostaEStatus404_QuandoConsultarCozinhaInexistente() {
         given()
-                .pathParam("id", 4)
+                .pathParam("id", COZINHA_ID_INEXISTENTE)
                 .accept(ContentType.JSON)
                 .when()
                 .get("/{id}")
@@ -100,14 +115,31 @@ public class CadastroCozinhaIT {
     }
 
     private void prepararDados() {
-        Cozinha cozinha1 = new Cozinha();
-        cozinha1.setNome("Tailandesa");
-        cozinhaRepository.save(cozinha1);
+        List<Cozinha> cozinhas = new ArrayList<>();
+        
+        Cozinha cozinhaTailandesa = new Cozinha();
+        cozinhaTailandesa.setNome("Tailandesa");
+        cozinhas.add(cozinhaTailandesa);
 
-        Cozinha cozinha2 = new Cozinha();
-        cozinha2.setNome("Brasileira");
-        cozinhaRepository.save(cozinha2);
+        cozinhaBrasileira = new Cozinha();
+        cozinhaBrasileira.setNome("Brasileira");
+        cozinhas.add(cozinhaBrasileira);
 
+        Cozinha cozinha3 = new Cozinha();
+        cozinha3.setNome("Italiana");
+        cozinhas.add(cozinha3);
+
+        salvarCozinhas(cozinhas);
+        
+    }
+
+    private void salvarCozinhas(List<Cozinha> cozinhas) {
+        quantidadeCozinhas = cozinhas.size();
+
+        for (Cozinha cozinha :
+                cozinhas) {
+            cozinhaRepository.save(cozinha);
+        }
     }
 
 }
