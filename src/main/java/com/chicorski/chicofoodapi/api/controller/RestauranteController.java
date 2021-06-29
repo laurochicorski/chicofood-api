@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.controller;
 
+import com.chicorski.chicofoodapi.api.model.RestauranteModel;
 import com.chicorski.chicofoodapi.core.validation.ValidacaoException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
@@ -49,8 +50,12 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}")
-    public Restaurante buscar(@PathVariable Long id) {
-        return cadastroRestaurante.buscarOuFalhar(id);
+    public RestauranteModel buscar(@PathVariable Long id) {
+        Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(id);
+
+        RestauranteModel restauranteModel = null;
+
+        return restauranteModel;
     }
 
     @PostMapping
