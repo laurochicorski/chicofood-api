@@ -79,7 +79,7 @@ public class CadastroCozinhaIT {
     @Test
     public void deveRetornarStatus201_QuandoCadastrarCozinha() {
         jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource(
-                "/json/cozinha-chinesa.json");
+                "/json/correto/cozinha-chinesa.json");
 
         given()
                 .body(jsonCorretoCozinhaChinesa)
