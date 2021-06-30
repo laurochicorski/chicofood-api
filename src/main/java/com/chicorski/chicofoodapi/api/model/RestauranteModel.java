@@ -1,14 +1,17 @@
 package com.chicorski.chicofoodapi.api.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 public class RestauranteModel {
 
     private Long id;
     private String nome;
+//    private BigDecimal precoFrete;
     private BigDecimal taxaFrete;
     private CozinhaModel cozinha;
 }
