@@ -1,9 +1,12 @@
 package com.chicorski.chicofoodapi.api.controller;
 
+import com.chicorski.chicofoodapi.api.assembler.EstadoInputDisassembler;
+import com.chicorski.chicofoodapi.api.assembler.EstadoModelAssembler;
+import com.chicorski.chicofoodapi.api.model.EstadoModel;
+import com.chicorski.chicofoodapi.api.model.input.EstadoInput;
 import com.chicorski.chicofoodapi.domain.model.Estado;
 import com.chicorski.chicofoodapi.domain.repository.EstadoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroEstadoService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,35 +19,51 @@ import java.util.List;
 public class EstadoController {
 
     @Autowired
+    private EstadoModelAssembler estadoModelAssembler;
+
+    @Autowired
+    private EstadoInputDisassembler estadoInputDisassembler;
+
+    @Autowired
     private EstadoRepository estadoRepository;
 
     @Autowired
     private CadastroEstadoService cadastroEstado;
 
     @GetMapping
-    public List<Estado> listar() {
-        return estadoRepository.findAll();
+    public List<EstadoModel> listar() {
+        List<Estado> todosEstados = estadoRepository.findAll();
+
+        return estadoModelAssembler.toCollectionModel(todosEstados);
     }
 
     @GetMapping("/{id}")
-    public Estado buscar(@PathVariable Long id) {
-        return cadastroEstado.buscarOuFalhar(id);
+    public EstadoModel buscar(@PathVariable Long id) {
+        Estado estado = cadastroEstado.buscarOuFalhar(id);
+
+        return estadoModelAssembler.toModel(estado);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Estado adicionar(@RequestBody @Valid Estado estado) {
-        return cadastroEstado.salvar(estado);
+    public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
+        Estado estado = estadoInputDisassembler.toDomainObject(estadoInput);
+
+        estado = cadastroEstado.salvar(estado);
+
+        return estadoModelAssembler.toModel(estado);
     }
 
     @PutMapping("/{estadoId}")
-    public Estado atualizar(@PathVariable Long estadoId,
-                                            @RequestBody @Valid Estado estado) {
+    public EstadoModel atualizar(@PathVariable Long estadoId,
+                                            @RequestBody @Valid EstadoInput estadoInput) {
         Estado estadoAtual = cadastroEstado.buscarOuFalhar(estadoId);
-        BeanUtils.copyProperties(estado, estadoAtual, "id");
-        return cadastroEstado.salvar(estadoAtual);
+        estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
+        estadoAtual = cadastroEstado.salvar(estadoAtual);
 
+        return estadoModelAssembler.toModel(estadoAtual);
     }
+
     @DeleteMapping("/{estadoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long estadoId) {
