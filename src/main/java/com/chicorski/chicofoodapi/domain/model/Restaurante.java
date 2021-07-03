@@ -28,18 +28,12 @@ public class Restaurante {
     @EqualsAndHashCode.Include
     private Long id;
 
-//    @NotBlank
     @Column(nullable = false)
     private String nome;
 
-//    @NotNull
-//    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-//    @Valid
-//    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-//    @NotNull
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
@@ -63,4 +57,14 @@ public class Restaurante {
 
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
+
+    private Boolean ativo = Boolean.TRUE;
+
+    public void ativar() {
+        setAtivo(true);
+    }
+
+    public void inativar() {
+        setAtivo(false);
+    }
 }

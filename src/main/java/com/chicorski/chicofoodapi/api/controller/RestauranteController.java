@@ -79,4 +79,16 @@ public class RestauranteController {
             throw new NegocioException(e.getMessage());
         }
     }
+
+    @PutMapping("/{id}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable Long id) {
+        cadastroRestaurante.ativar(id);
+    }
+
+    @DeleteMapping("/{id}/inativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativa(@PathVariable Long id) {
+        cadastroRestaurante.inativar(id);
+    }
 }
