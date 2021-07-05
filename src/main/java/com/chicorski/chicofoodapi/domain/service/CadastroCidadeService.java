@@ -18,8 +18,6 @@ import javax.transaction.Transactional;
 @Service
 public class CadastroCidadeService {
 
-    private static final String MSG_CIDADE_NAO_ENCONTRADA = "Não existe Cidade com o código: %d";
-    private static final String MSG_ESTADO_NAO_ENCONTRADO = "Não existe Estado com o código: %d";
     private static final String MSG_CIDADE_EM_USO = "Cidade de código %d não pode ser removidade, pois está em uso";
 
     @Autowired
