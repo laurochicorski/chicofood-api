@@ -8,9 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -55,6 +53,8 @@ public class Restaurante {
 
     private Boolean ativo = Boolean.TRUE;
 
+    private Boolean aberto = Boolean.FALSE;
+
     public void ativar() {
         setAtivo(true);
     }
@@ -69,5 +69,13 @@ public class Restaurante {
 
     public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
         return formasPagamento.remove(formaPagamento);
+    }
+
+    public void abrir() {
+        setAberto(true);
+    }
+
+    public void fechar() {
+        setAberto(false);
     }
 }

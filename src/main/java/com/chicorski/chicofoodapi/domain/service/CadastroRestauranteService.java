@@ -1,6 +1,5 @@
 package com.chicorski.chicofoodapi.domain.service;
 
-import com.chicorski.chicofoodapi.domain.exception.CozinhaNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
@@ -78,6 +77,20 @@ public class CadastroRestauranteService {
         FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
 
         restaurante.adicionarFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void abrir(Long restauranteId) {
+        Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+
+        restauranteAtual.abrir();
+    }
+
+    @Transactional
+    public void fechar(Long restauranteId) {
+        Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+
+        restauranteAtual.fechar();
     }
 
 }

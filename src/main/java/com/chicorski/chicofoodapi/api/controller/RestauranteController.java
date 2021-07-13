@@ -6,12 +6,10 @@ import com.chicorski.chicofoodapi.api.model.RestauranteModel;
 import com.chicorski.chicofoodapi.api.model.input.RestauranteInput;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
-import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.domain.repository.RestauranteRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroRestauranteService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.SmartValidator;
@@ -90,5 +88,17 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativa(@PathVariable Long id) {
         cadastroRestaurante.inativar(id);
+    }
+
+    @PutMapping("/{restauranteId}/abertura")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void abrir(@PathVariable Long restauranteId) {
+        cadastroRestaurante.abrir(restauranteId);
+    }
+
+    @PutMapping("/{restauranteId}/fechamento")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void fechar(@PathVariable Long restauranteId) {
+        cadastroRestaurante.fechar(restauranteId);
     }
 }
