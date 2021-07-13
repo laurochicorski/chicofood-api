@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.domain.service;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
 import com.chicorski.chicofoodapi.domain.exception.GrupoNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Grupo;
+import com.chicorski.chicofoodapi.domain.model.Permissao;
 import com.chicorski.chicofoodapi.domain.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +19,9 @@ public class CadastroGrupoService {
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private CadastroPermissaoService cadastroPermissao;
 
     @Transactional
     public Grupo salvar(Grupo grupo) {
@@ -40,6 +44,22 @@ public class CadastroGrupoService {
     public Grupo buscarOuFalhar(Long id) {
         return grupoRepository.findById(id)
                 .orElseThrow(() -> new GrupoNaoEncontradaException(id));
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+        grupo.removerPermissao(permissao);
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+
+        grupo.adicionarPermissao(permissao);
     }
 
 }
