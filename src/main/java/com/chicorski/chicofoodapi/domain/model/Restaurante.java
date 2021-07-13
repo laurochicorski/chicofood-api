@@ -51,7 +51,7 @@ public class Restaurante {
     private Set<FormaPagamento> formasPagamento = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "restaurante")
-    private List<Produto> produtos = new ArrayList<>();
+    private Set<Produto> produtos = new LinkedHashSet<>();
 
     private Boolean ativo = Boolean.TRUE;
 
