@@ -4,6 +4,7 @@ import com.chicorski.chicofoodapi.domain.exception.CozinhaNaoEncontradaException
 import com.chicorski.chicofoodapi.domain.exception.RestauranteNaoEncontradoException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
+import com.chicorski.chicofoodapi.domain.model.FormaPagamento;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.domain.repository.RestauranteRepository;
@@ -27,6 +28,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroCozinhaService cadastroCozinha;
+
+    @Autowired
+    private CadastroFormaPagamentoService cadastroFormaPagamento;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -60,5 +64,20 @@ public class CadastroRestauranteService {
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }
 
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.adicionarFormaPagamento(formaPagamento);
+    }
 
 }
