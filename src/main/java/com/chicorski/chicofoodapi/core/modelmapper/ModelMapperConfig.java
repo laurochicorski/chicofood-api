@@ -2,7 +2,9 @@ package com.chicorski.chicofoodapi.core.modelmapper;
 
 import com.chicorski.chicofoodapi.api.model.EnderecoModel;
 import com.chicorski.chicofoodapi.api.model.RestauranteModel;
+import com.chicorski.chicofoodapi.api.model.input.ItemPedidoInput;
 import com.chicorski.chicofoodapi.domain.model.Endereco;
+import com.chicorski.chicofoodapi.domain.model.ItemPedido;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,9 @@ public class ModelMapperConfig {
         var enderecoModelTypeMap = modelMapper.createTypeMap(Endereco.class, EnderecoModel.class);
 
         enderecoModelTypeMap.<String>addMapping(src -> src.getCidade().getEstado().getNome(), (dest, value) -> dest.getCidade().setEstado(value));
+
+        modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)
+                .addMappings(mapper -> mapper.skip(ItemPedido::setId));
 
         return modelMapper;
     }
