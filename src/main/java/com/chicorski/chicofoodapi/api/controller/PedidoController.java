@@ -1,7 +1,9 @@
 package com.chicorski.chicofoodapi.api.controller;
 
 import com.chicorski.chicofoodapi.api.assembler.PedidoModelAssembler;
+import com.chicorski.chicofoodapi.api.assembler.PedidoResumoModelAssembler;
 import com.chicorski.chicofoodapi.api.model.PedidoModel;
+import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
 import com.chicorski.chicofoodapi.domain.repository.PedidoRepository;
 import com.chicorski.chicofoodapi.domain.service.EmissaoPedidoService;
@@ -26,11 +28,14 @@ public class PedidoController {
     @Autowired
     private PedidoModelAssembler pedidoModelAssembler;
 
+    @Autowired
+    private PedidoResumoModelAssembler pedidoResumoModelAssembler;
+
     @GetMapping
-    public List<PedidoModel> listar() {
+    public List<PedidoResumoModel> listar() {
         List<Pedido> todosPedidos = pedidoRepository.findAll();
 
-        return pedidoModelAssembler.toCollectionModel(todosPedidos);
+        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }
 
     @GetMapping("/{pedidoId}")
