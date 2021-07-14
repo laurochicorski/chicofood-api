@@ -1,10 +1,7 @@
 package com.chicorski.chicofoodapi.domain.service;
 
 import com.chicorski.chicofoodapi.domain.exception.RestauranteNaoEncontradoException;
-import com.chicorski.chicofoodapi.domain.model.Cidade;
-import com.chicorski.chicofoodapi.domain.model.Cozinha;
-import com.chicorski.chicofoodapi.domain.model.FormaPagamento;
-import com.chicorski.chicofoodapi.domain.model.Restaurante;
+import com.chicorski.chicofoodapi.domain.model.*;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroFormaPagamentoService cadastroFormaPagamento;
+
+    @Autowired
+    private CadastroUsuarioService cadastroUsuario;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -91,6 +91,22 @@ public class CadastroRestauranteService {
         Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 
         restauranteAtual.fechar();
+    }
+
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+
+        restaurante.removerResponsavel(usuario);
+    }
+
+    @Transactional
+    public void associarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+
+        restaurante.adicionarResponsavel(usuario);
     }
 
 }
