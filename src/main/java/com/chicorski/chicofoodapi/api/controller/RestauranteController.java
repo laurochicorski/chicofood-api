@@ -44,36 +44,31 @@ public class RestauranteController {
     @Autowired
     private RestauranteInputDisassembler restauranteInputDisassembler;
 
-//    @GetMapping
+    @JsonView(RestauranteView.Resumo.class)
+    @GetMapping
     public List<RestauranteModel> listar(){
         List<Restaurante> restaurantes = restauranteRepository.findAll();
 
         return restauranteModelAssembler.toCollectionModel(restaurantes);
     }
 
-    @GetMapping
-    public MappingJacksonValue listarProjecao(@RequestParam(required = false) String projecao) {
-        List<Restaurante> restaurantes = restauranteRepository.findAll();
-        List<RestauranteModel> restaurantesModel = restauranteModelAssembler.toCollectionModel(restaurantes);
-
-        MappingJacksonValue restauranteWrapper = new MappingJacksonValue(restaurantesModel);
-
-        restauranteWrapper.setSerializationView(RestauranteView.Resumo.class);
-
-        if ("apenas-nome".equals(projecao)) {
-            restauranteWrapper.setSerializationView(RestauranteView.ApenasNome.class);
-        } else if ("completo".equals(projecao)) {
-            restauranteWrapper.setSerializationView(null);
-        }
-
-        return restauranteWrapper;
-    }
-
-    @JsonView(RestauranteView.Resumo.class)
-    @GetMapping(params = "projecao=resumo")
-    public List<RestauranteModel> listarResumido(){
-        return listar();
-    }
+//    @GetMapping
+//    public MappingJacksonValue listarProjecao(@RequestParam(required = false) String projecao) {
+//        List<Restaurante> restaurantes = restauranteRepository.findAll();
+//        List<RestauranteModel> restaurantesModel = restauranteModelAssembler.toCollectionModel(restaurantes);
+//
+//        MappingJacksonValue restauranteWrapper = new MappingJacksonValue(restaurantesModel);
+//
+//        restauranteWrapper.setSerializationView(RestauranteView.Resumo.class);
+//
+//        if ("apenas-nome".equals(projecao)) {
+//            restauranteWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+//        } else if ("completo".equals(projecao)) {
+//            restauranteWrapper.setSerializationView(null);
+//        }
+//
+//        return restauranteWrapper;
+//    }
 
     @JsonView(RestauranteView.ApenasNome.class)
     @GetMapping(params = "projecao=apenas-nome")
