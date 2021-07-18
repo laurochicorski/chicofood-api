@@ -10,8 +10,10 @@ import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaExceptio
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
 import com.chicorski.chicofoodapi.domain.model.Usuario;
+import com.chicorski.chicofoodapi.domain.repository.PedidoFilter;
 import com.chicorski.chicofoodapi.domain.repository.PedidoRepository;
 import com.chicorski.chicofoodapi.domain.service.EmissaoPedidoService;
+import com.chicorski.chicofoodapi.infrastructure.repository.spec.PedidoSpecs;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.apache.commons.lang3.StringUtils;
@@ -43,11 +45,18 @@ public class PedidoController {
     private PedidoInputDisassembler pedidoInputDisassembler;
 
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> todosPedidos = pedidoRepository.findAll();
+    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+        List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 
         return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }
+
+//    @GetMapping
+//    public List<PedidoResumoModel> listar() {
+//        List<Pedido> todosPedidos = pedidoRepository.findAll();
+//
+//        return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
+//    }
 
     @GetMapping("/{codigo}")
     public PedidoModel buscar(@PathVariable String codigo) {
