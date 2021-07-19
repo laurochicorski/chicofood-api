@@ -16,7 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<modelmapper.version>2.3.0</modelmapper.version>
-		<squiggly.version>1.13.18</squiggly.version>
+		<squiggly.version>1.3.18</squiggly.version>
 	</properties>
 	<dependencies>
 		<dependency>
