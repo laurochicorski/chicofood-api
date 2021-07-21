@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.api.model.PedidoInputDisassembler;
 import com.chicorski.chicofoodapi.api.model.PedidoModel;
 import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;
 import com.chicorski.chicofoodapi.api.model.input.PedidoInput;
+import com.chicorski.chicofoodapi.core.data.PageableTranslator;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
@@ -14,6 +15,7 @@ import com.chicorski.chicofoodapi.domain.repository.PedidoFilter;
 import com.chicorski.chicofoodapi.domain.repository.PedidoRepository;
 import com.chicorski.chicofoodapi.domain.service.EmissaoPedidoService;
 import com.chicorski.chicofoodapi.infrastructure.repository.spec.PedidoSpecs;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,6 +49,8 @@ public class PedidoController {
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
                                              @PageableDefault(size=10) Pageable pageable) {
+        pageable = traduzirPageable(pageable);
+
         Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
 
         List<PedidoResumoModel> pedidosModel = pedidoResumoModelAssembler.toCollectionModel(pedidosPage.getContent());
@@ -77,5 +81,14 @@ public class PedidoController {
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageable(Pageable apiPageable) {
+        var mapeamento = ImmutableMap.of("codigo", "codigo",
+                "restaurante.nome", "restaurante.nome",
+                "nomeCliente", "cliente.nome",
+                "valorTotal", "valor Total");
+
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 }
