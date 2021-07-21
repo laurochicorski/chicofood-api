@@ -1,4 +1,4 @@
-package com.chicorski.chicofoodapi.infrastructure.repository;
+package com.chicorski.chicofoodapi.infrastructure.service.query;
 
 import com.chicorski.chicofoodapi.domain.filter.VendaDiariaFilter;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
