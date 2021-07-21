@@ -11,7 +11,7 @@ import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaExceptio
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
 import com.chicorski.chicofoodapi.domain.model.Usuario;
-import com.chicorski.chicofoodapi.domain.repository.PedidoFilter;
+import com.chicorski.chicofoodapi.domain.filter.PedidoFilter;
 import com.chicorski.chicofoodapi.domain.repository.PedidoRepository;
 import com.chicorski.chicofoodapi.domain.service.EmissaoPedidoService;
 import com.chicorski.chicofoodapi.infrastructure.repository.spec.PedidoSpecs;

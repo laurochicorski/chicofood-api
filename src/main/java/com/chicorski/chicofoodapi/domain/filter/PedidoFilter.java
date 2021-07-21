@@ -1,4 +1,4 @@
-package com.chicorski.chicofoodapi.domain.repository;
+package com.chicorski.chicofoodapi.domain.filter;
 
 import lombok.Getter;
 import lombok.Setter;

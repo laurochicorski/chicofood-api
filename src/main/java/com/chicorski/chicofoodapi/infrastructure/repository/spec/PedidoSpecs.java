@@ -1,7 +1,7 @@
 package com.chicorski.chicofoodapi.infrastructure.repository.spec;
 
 import com.chicorski.chicofoodapi.domain.model.Pedido;
-import com.chicorski.chicofoodapi.domain.repository.PedidoFilter;
+import com.chicorski.chicofoodapi.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
