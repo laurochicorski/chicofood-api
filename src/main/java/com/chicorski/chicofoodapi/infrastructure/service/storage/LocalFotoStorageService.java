@@ -8,6 +8,7 @@ import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 
 @Service
 public class LocalFotoStorageService implements FotoStorageService {
@@ -18,6 +19,7 @@ public class LocalFotoStorageService implements FotoStorageService {
     @Override
     public void armazenar(NovaFoto novaFoto) {
         try {
+
             Path arquivoPath = getArquivoPath(novaFoto.getNomeArquivo());
 
             FileCopyUtils.copy(novaFoto.getInputStream(), Files.newOutputStream(arquivoPath));
