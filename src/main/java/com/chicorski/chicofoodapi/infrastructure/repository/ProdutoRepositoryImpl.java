@@ -12,11 +12,16 @@ import javax.transaction.Transactional;
 public class ProdutoRepositoryImpl implements ProdutoRepositoryQueries {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private EntityManager manager;
 
     @Override
     @Transactional
     public FotoProduto save(FotoProduto fotoProduto) {
-        return entityManager.merge(fotoProduto);
+        return manager.merge(fotoProduto);
+    }
+
+    @Override
+    public void delete(FotoProduto fotoProduto) {
+        manager.remove(fotoProduto);
     }
 }
