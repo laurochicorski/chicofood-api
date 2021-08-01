@@ -9,10 +9,7 @@ import com.chicorski.chicofoodapi.domain.service.CadastroProdutoService;
 import com.chicorski.chicofoodapi.domain.service.CatalogoFotoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -50,5 +47,12 @@ public class RestauranteProdutoFotoController {
         FotoProduto fotoSalva = catalogoFotoProduto.salvar(foto, arquivo.getInputStream());
 
         return fotoProdutoModelAssembler.toModel(fotoSalva);
+    }
+
+    @GetMapping
+    public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+        FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+
+        return fotoProdutoModelAssembler.toModel(fotoProduto);
     }
 }

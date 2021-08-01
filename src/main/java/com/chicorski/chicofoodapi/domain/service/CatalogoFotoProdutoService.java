@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.domain.service;
 
+import com.chicorski.chicofoodapi.domain.exception.FotoProdutoNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.FotoProduto;
 import com.chicorski.chicofoodapi.domain.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,10 @@ public class CatalogoFotoProdutoService {
         fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
 
         return fotoProduto;
+    }
+
+    public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
+        return produtoRepository.findFotoById(restauranteId, produtoId)
+                .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
     }
 }
