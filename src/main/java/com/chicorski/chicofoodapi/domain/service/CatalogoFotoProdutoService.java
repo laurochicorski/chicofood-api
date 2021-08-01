@@ -17,13 +17,13 @@ public class CatalogoFotoProdutoService {
     private ProdutoRepository produtoRepository;
 
     @Autowired
-    private FotoStorageService fotoStorageService;
+    private FotoStorageService fotoStorage;
 
     @Transactional
     public FotoProduto salvar(FotoProduto fotoProduto, InputStream dadosArquivo) {
         Long restauranteId = fotoProduto.getRestauranteId();
         Long produtoId = fotoProduto.getProduto().getId();
-        String nomeNovoArquivo = fotoStorageService.gerarNomeArquivo(fotoProduto.getNomeArquivo());
+        String nomeNovoArquivo = fotoStorage.gerarNomeArquivo(fotoProduto.getNomeArquivo());
         String nomeArquivoExistente = null;
 
         Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
@@ -43,7 +43,7 @@ public class CatalogoFotoProdutoService {
                 .inputStream(dadosArquivo)
                 .build();
 
-        fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
+        fotoStorage.substituir(nomeArquivoExistente, novaFoto);
 
         return fotoProduto;
     }
@@ -51,5 +51,15 @@ public class CatalogoFotoProdutoService {
     public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
         return produtoRepository.findFotoById(restauranteId, produtoId)
                 .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
+    }
+
+    @Transactional
+    public void excluir(Long restauranteId, Long produtoId) {
+        FotoProduto foto = buscarOuFalhar(restauranteId, produtoId);
+
+        produtoRepository.delete(foto);
+        produtoRepository.flush();
+
+        fotoStorage.remover(foto.getNomeArquivo());
     }
 }
