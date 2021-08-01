@@ -1,12 +1,18 @@
 package com.chicorski.chicofoodapi.infrastructure.service.storage;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.chicorski.chicofoodapi.domain.service.FotoStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 
 @Service
 public class S3FotoStorageService implements FotoStorageService {
+
+
+    @Autowired
+    private AmazonS3 amazonS3;
 
     @Override
     public InputStream recuperar(String nomeArquivo) {
