@@ -2,6 +2,8 @@ package com.chicorski.chicofoodapi.domain.service;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Singular;
 
 import java.util.Set;
 
@@ -12,7 +14,10 @@ public interface EnvioEmailService {
     @Getter
     @Builder
     class Mensagem {
+
+        @Singular
         private Set<String> destinatarios;
+        @NonNull
         private String assunto;
         private String corpo;
     }

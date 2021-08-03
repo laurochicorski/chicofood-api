@@ -1,8 +1,6 @@
 package com.chicorski.chicofoodapi.domain.service;
 
-import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
-import com.chicorski.chicofoodapi.domain.model.StatusPedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +13,23 @@ public class FluxoPedidoService {
     @Autowired
     private EmissaoPedidoService emissaoPedido;
 
+    @Autowired
+    private EnvioEmailService envioEmail;
+
     @Transactional
     public void confirmar(String codigo) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigo);
 
         pedido.confirmar();
         pedido.setDataConfirmacao(OffsetDateTime.now());
+
+        var mensagem = EnvioEmailService.Mensagem.builder()
+                .assunto(pedido.getRestaurante().getNome() + " - Pedido confirmado.")
+                .corpo("O pedido de código <strong>" + pedido.getCodigo() + "</strong> foi confirmado!")
+                .destinatario(pedido.getCliente().getEmail())
+                .build();
+
+        envioEmail.enviar(mensagem);
     }
 
     @Transactional
