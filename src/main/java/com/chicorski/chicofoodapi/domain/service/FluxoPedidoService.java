@@ -32,9 +32,9 @@ public class FluxoPedidoService {
     @Transactional
     public void cancelar(String codigo) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigo);
-
         pedido.cancelar();
-        pedido.setDataCancelamento(OffsetDateTime.now());
+
+        pedidoRepository.save(pedido);
     }
 
     @Transactional
