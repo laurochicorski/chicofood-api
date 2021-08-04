@@ -2,6 +2,7 @@ package com.chicorski.chicofoodapi.core.email;
 
 import com.chicorski.chicofoodapi.domain.service.EnvioEmailService;
 import com.chicorski.chicofoodapi.infrastructure.service.email.FakeEnvioEmailService;
+import com.chicorski.chicofoodapi.infrastructure.service.email.SandboxEnvioEmailService;
 import com.chicorski.chicofoodapi.infrastructure.service.email.SmtpEnvioEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,8 @@ public class EmailConfig {
                 return new FakeEnvioEmailService();
             case SMTP:
                 return new SmtpEnvioEmailService();
+            case SANDBOX:
+                return new SandboxEnvioEmailService();
             default:
                 return null;
         }
