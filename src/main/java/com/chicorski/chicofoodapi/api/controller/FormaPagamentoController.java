@@ -39,6 +39,10 @@ public class FormaPagamentoController {
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
+//                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+//                .cacheControl(CacheControl.noCache()) - Quando usado o no cache sempre será necessário fazer a validação do eTag
+//                .cacheControl(CacheControl.noStore()) - Desativa o cache
                 .body(formaPagamentoModelAssembler.toCollectionModel(formasPagamento));
     }
 
