@@ -61,7 +61,21 @@ public class FormaPagamentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long id) {
+    public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long id, ServletWebRequest request) {
+        ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+
+        String eTag = "0";
+
+        OffsetDateTime dataUltimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacaoPorId(id);
+
+        if (dataUltimaAtualizacao != null) {
+            eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+        }
+
+        if (request.checkNotModified(eTag)) {
+            return null;
+        }
+
         FormaPagamento formaPagamento = cadastroFormaPagamento.buscarOuFalhar(id);
 
         return ResponseEntity.ok()
