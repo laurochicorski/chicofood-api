@@ -9,6 +9,8 @@ import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.repository.CidadeRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCidadeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
@@ -32,6 +35,7 @@ public class CidadeController {
     @Autowired
     private CadastroCidadeService cadastroCidade;
 
+    @ApiOperation("Lista as cidades")
     @GetMapping
     private List<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -39,6 +43,7 @@ public class CidadeController {
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
+    @ApiOperation("Busca cidade por id")
     @GetMapping("/{id}")
     private CidadeModel buscar(@PathVariable Long id) {
         Cidade cidade = cadastroCidade.buscarOuFalhar(id);
@@ -46,6 +51,7 @@ public class CidadeController {
         return cidadeModelAssembler.toModel(cidade);
     }
 
+    @ApiOperation("Inclui uma cidade por id")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     private CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
@@ -61,6 +67,7 @@ public class CidadeController {
 
     }
 
+    @ApiOperation("Edita uma cidade por id")
     @PutMapping("/{id}")
     private CidadeModel atualizar(@PathVariable Long id, @RequestBody @Valid CidadeInput cidadeInput) {
         try {
@@ -76,6 +83,7 @@ public class CidadeController {
         }
     }
 
+    @ApiOperation("Exclui uma cidade por id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void remover(@PathVariable Long id) {

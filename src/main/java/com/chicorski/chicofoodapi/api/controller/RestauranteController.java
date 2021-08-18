@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin("http://localhost:9000")
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
