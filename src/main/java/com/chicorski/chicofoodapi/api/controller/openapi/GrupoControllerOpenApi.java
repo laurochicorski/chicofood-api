@@ -3,12 +3,14 @@ package com.chicorski.chicofoodapi.api.controller.openapi;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.GrupoModel;
 import com.chicorski.chicofoodapi.api.model.input.GrupoInput;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import java.util.List;
 
+@Api(tags = "Grupos")
 public interface GrupoControllerOpenApi {
 
     @ApiOperation("Lista os grupos")
