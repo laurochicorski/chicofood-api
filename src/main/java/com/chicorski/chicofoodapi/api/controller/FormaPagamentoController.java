@@ -4,6 +4,7 @@ import com.chicorski.chicofoodapi.api.assembler.FormaPagamentoInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.FormaPagamentoModelAssembler;
 import com.chicorski.chicofoodapi.api.model.FormaPagamentoModel;
 import com.chicorski.chicofoodapi.api.model.input.FormaPagamentoInput;
+import com.chicorski.chicofoodapi.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.model.FormaPagamento;
 import com.chicorski.chicofoodapi.domain.repository.FormaPagamentoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroFormaPagamentoService;
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     @Autowired
     private CadastroFormaPagamentoService cadastroFormaPagamento;
