@@ -4,6 +4,7 @@ import com.chicorski.chicofoodapi.api.assembler.CozinhaInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.CozinhaModelAssembler;
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
 import com.chicorski.chicofoodapi.api.model.input.CozinhaInput;
+import com.chicorski.chicofoodapi.api.openapi.controller.CozinhaControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
@@ -25,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/cozinhas")
-public class CozinhaController {
+public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
@@ -40,14 +41,12 @@ public class CozinhaController {
     private CozinhaInputDisassembler cozinhaInputDisassembler;
 
     @GetMapping
-    public Page<CozinhaModel> listar(@PageableDefault(size = 10) Pageable pageable) {
+    public Page<CozinhaModel> listar(@PageableDefault Pageable pageable) {
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
         List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
 
-        Page<CozinhaModel> cozinhasModelPage = new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
-
-        return cozinhasModelPage;
+        return new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
     }
 
     @GetMapping("/{cozinhaId}")
