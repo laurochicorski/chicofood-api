@@ -1,9 +1,11 @@
 package com.chicorski.chicofoodapi.core.openapi;
 
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
+import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;
 import com.chicorski.chicofoodapi.api.openapi.model.CozinhasModelOpenApi;
 import com.chicorski.chicofoodapi.api.openapi.model.PageableModelOpenApi;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
+import com.chicorski.chicofoodapi.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.*;
-import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
@@ -50,24 +51,23 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .globalResponseMessage(RequestMethod.POST, globalPostPutReponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, globalPostPutReponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, globalDeleteReponseMessages())
-//                .globalOperationParameters(Arrays.asList(
-//                        new ParameterBuilder().name("campos")
-//                                .description("Nomes das propriedades para filtrar na reposta separados por virgula")
-//                                .parameterType("query")
-//                                .modelRef(new ModelRef("string"))
-//                                .build()
-//                ))
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(Page.class, CozinhaModel.class), CozinhasModelOpenApi.class
+                        typeResolver.resolve(Page.class, CozinhaModel.class),
+                            CozinhasModelOpenApi.class
+                ))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(Page.class, PedidoResumoModel.class),
+                            PedidosResumoModelOpenApi.class
                 ))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
-                        new Tag("Formas de pagamento", "Gerencia as formas de pagamento"));
+                        new Tag("Formas de pagamento", "Gerencia as formas de pagamento"),
+                        new Tag("Pedidos", "Gerencia os pedidos"));
     }
 
     private List<ResponseMessage> globalDeleteReponseMessages() {

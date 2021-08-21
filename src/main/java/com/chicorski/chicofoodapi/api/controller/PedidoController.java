@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.api.model.PedidoInputDisassembler;
 import com.chicorski.chicofoodapi.api.model.PedidoModel;
 import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;
 import com.chicorski.chicofoodapi.api.model.input.PedidoInput;
+import com.chicorski.chicofoodapi.api.openapi.controller.PedidoControllerOpenApi;
 import com.chicorski.chicofoodapi.core.data.PageableTranslator;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
@@ -24,14 +25,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/pedidos")
-public class PedidoController {
+@RequestMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
 
     @Autowired
     private PedidoRepository pedidoRepository;
@@ -48,10 +50,6 @@ public class PedidoController {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na reposta separados por virgula",
-            name = "campos", paramType = "query", type = "string")
-    })
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
                                              @PageableDefault(size=10) Pageable pageable) {
@@ -64,10 +62,6 @@ public class PedidoController {
         return new PageImpl<PedidoResumoModel>(pedidosModel, pageable, pedidosPage.getTotalElements());
     }
 
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na reposta separados por virgula",
-                    name = "campos", paramType = "query", type = "string")
-    })
     @GetMapping("/{codigo}")
     public PedidoModel buscar(@PathVariable String codigo) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigo);
