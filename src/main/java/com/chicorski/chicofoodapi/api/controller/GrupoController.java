@@ -2,6 +2,7 @@ package com.chicorski.chicofoodapi.api.controller;
 
 import com.chicorski.chicofoodapi.api.assembler.GrupoInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.GrupoModelAssembler;
+import com.chicorski.chicofoodapi.api.controller.openapi.GrupoControllerOpenApi;
 import com.chicorski.chicofoodapi.api.model.FormaPagamentoModel;
 import com.chicorski.chicofoodapi.api.model.GrupoModel;
 import com.chicorski.chicofoodapi.api.model.input.FormaPagamentoInput;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 
     @Autowired
     private CadastroGrupoService cadastroGrupo;
