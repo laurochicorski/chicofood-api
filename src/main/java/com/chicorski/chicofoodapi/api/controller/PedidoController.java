@@ -16,6 +16,8 @@ import com.chicorski.chicofoodapi.domain.repository.PedidoRepository;
 import com.chicorski.chicofoodapi.domain.service.EmissaoPedidoService;
 import com.chicorski.chicofoodapi.infrastructure.repository.spec.PedidoSpecs;
 import com.google.common.collect.ImmutableMap;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -46,6 +48,10 @@ public class PedidoController {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na reposta separados por virgula",
+            name = "campos", paramType = "query", type = "string")
+    })
     @GetMapping
     public Page<PedidoResumoModel> pesquisar(PedidoFilter filtro,
                                              @PageableDefault(size=10) Pageable pageable) {
@@ -58,6 +64,10 @@ public class PedidoController {
         return new PageImpl<PedidoResumoModel>(pedidosModel, pageable, pedidosPage.getTotalElements());
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Nomes das propriedades para filtrar na reposta separados por virgula",
+                    name = "campos", paramType = "query", type = "string")
+    })
     @GetMapping("/{codigo}")
     public PedidoModel buscar(@PathVariable String codigo) {
         Pedido pedido = emissaoPedido.buscarOuFalhar(codigo);
