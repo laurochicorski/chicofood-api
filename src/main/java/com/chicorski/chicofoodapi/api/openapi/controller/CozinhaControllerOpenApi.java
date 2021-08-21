@@ -3,10 +3,7 @@ package com.chicorski.chicofoodapi.api.openapi.controller;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
 import com.chicorski.chicofoodapi.api.model.input.CozinhaInput;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,25 +18,26 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 400, message = "ID da cozinha inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    CozinhaModel buscar(Long id);
+    CozinhaModel buscar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long id);
 
     @ApiOperation("Cadastra uma cozinha")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Cozinha cadastrada"),
     })
-    CozinhaModel adicionar(CozinhaInput cozinhaInput);
+    CozinhaModel adicionar(@ApiParam(name = "corpo", value = "Representação de uma cozinha.", example = "1", required = true) CozinhaInput cozinhaInput);
 
     @ApiOperation("Atualiza uma cozinha por ID")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Cozinha atualizada"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    CozinhaModel atualizar(Long id, CozinhaInput cozinhaInput);
+    CozinhaModel atualizar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long id,
+                           @ApiParam(name = "corpo", value = "Representação de uma cozinha com os novos dados.", example = "1", required = true) CozinhaInput cozinhaInput);
 
     @ApiOperation("Exclui uma cozinha por ID")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Cozinha excluída"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    void remover(Long id);
+    void remover(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long id);
 }

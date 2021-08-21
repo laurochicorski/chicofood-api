@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.api.model.RestauranteModel;
 import com.chicorski.chicofoodapi.api.model.input.RestauranteInput;
 import com.chicorski.chicofoodapi.api.model.view.RestauranteView;
 import com.chicorski.chicofoodapi.api.openapi.model.RestauranteBasicoModelOpenApi;
+import com.chicorski.chicofoodapi.api.openapi.model.RestauranteControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.exception.RestauranteNaoEncontradoException;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +29,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/restaurantes")
-public class RestauranteController {
+@RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
