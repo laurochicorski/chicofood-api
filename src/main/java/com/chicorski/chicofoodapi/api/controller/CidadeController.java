@@ -2,7 +2,7 @@ package com.chicorski.chicofoodapi.api.controller;
 
 import com.chicorski.chicofoodapi.api.assembler.CidadeInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.CidadeModelAssembler;
-import com.chicorski.chicofoodapi.api.controller.openapi.CidadeControllerOpenApi;
+import com.chicorski.chicofoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import com.chicorski.chicofoodapi.api.model.CidadeModel;
 import com.chicorski.chicofoodapi.api.model.input.CidadeInput;
 import com.chicorski.chicofoodapi.domain.exception.EstadoNaoEncontradaException;

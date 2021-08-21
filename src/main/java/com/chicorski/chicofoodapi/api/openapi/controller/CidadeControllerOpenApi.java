@@ -1,4 +1,4 @@
-package com.chicorski.chicofoodapi.api.controller.openapi;
+package com.chicorski.chicofoodapi.api.openapi.controller;
 
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.CidadeModel;

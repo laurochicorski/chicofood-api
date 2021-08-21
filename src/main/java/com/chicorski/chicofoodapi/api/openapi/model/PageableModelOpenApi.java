@@ -1,4 +1,4 @@
-package com.chicorski.chicofoodapi.api.controller.openapi.model;
+package com.chicorski.chicofoodapi.api.openapi.model;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;

@@ -2,12 +2,9 @@ package com.chicorski.chicofoodapi.api.controller;
 
 import com.chicorski.chicofoodapi.api.assembler.GrupoInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.GrupoModelAssembler;
-import com.chicorski.chicofoodapi.api.controller.openapi.GrupoControllerOpenApi;
-import com.chicorski.chicofoodapi.api.model.FormaPagamentoModel;
+import com.chicorski.chicofoodapi.api.openapi.controller.GrupoControllerOpenApi;
 import com.chicorski.chicofoodapi.api.model.GrupoModel;
-import com.chicorski.chicofoodapi.api.model.input.FormaPagamentoInput;
 import com.chicorski.chicofoodapi.api.model.input.GrupoInput;
-import com.chicorski.chicofoodapi.domain.model.FormaPagamento;
 import com.chicorski.chicofoodapi.domain.model.Grupo;
 import com.chicorski.chicofoodapi.domain.repository.GrupoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroGrupoService;
