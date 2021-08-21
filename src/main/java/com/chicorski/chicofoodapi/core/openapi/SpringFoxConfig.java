@@ -16,10 +16,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
@@ -53,6 +50,13 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .globalResponseMessage(RequestMethod.POST, globalPostPutReponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, globalPostPutReponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, globalDeleteReponseMessages())
+                .globalOperationParameters(Arrays.asList(
+                        new ParameterBuilder().name("campos")
+                                .description("Nomes das propriedades para filtrar na reposta separados por virgula")
+                                .parameterType("query")
+                                .modelRef(new ModelRef("string"))
+                                .build()
+                ))
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
