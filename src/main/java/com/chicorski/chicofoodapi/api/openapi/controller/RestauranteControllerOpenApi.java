@@ -1,9 +1,10 @@
-package com.chicorski.chicofoodapi.api.openapi.model;
+package com.chicorski.chicofoodapi.api.openapi.controller;
 
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.RestauranteModel;
 import com.chicorski.chicofoodapi.api.model.input.RestauranteInput;
 import com.chicorski.chicofoodapi.api.model.view.RestauranteView;
+import com.chicorski.chicofoodapi.api.openapi.model.RestauranteBasicoModelOpenApi;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.*;
 

@@ -4,19 +4,21 @@ import com.chicorski.chicofoodapi.api.assembler.EstadoInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.EstadoModelAssembler;
 import com.chicorski.chicofoodapi.api.model.EstadoModel;
 import com.chicorski.chicofoodapi.api.model.input.EstadoInput;
+import com.chicorski.chicofoodapi.api.openapi.controller.EstadoControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.model.Estado;
 import com.chicorski.chicofoodapi.domain.repository.EstadoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroEstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/estados")
-public class EstadoController {
+@RequestMapping(value = "/estados", produces = MediaType.APPLICATION_JSON_VALUE)
+public class EstadoController implements EstadoControllerOpenApi {
 
     @Autowired
     private EstadoModelAssembler estadoModelAssembler;
