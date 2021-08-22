@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.controller;
 
+import com.chicorski.chicofoodapi.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.filter.VendaDiariaFilter;
 import com.chicorski.chicofoodapi.domain.model.dto.VendaDiaria;
 import com.chicorski.chicofoodapi.domain.service.VendaQueryService;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     @Autowired
     private VendaQueryService vendaQueryService;
