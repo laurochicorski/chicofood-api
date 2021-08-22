@@ -6,19 +6,21 @@ import com.chicorski.chicofoodapi.api.model.UsuarioModel;
 import com.chicorski.chicofoodapi.api.model.input.SenhaInput;
 import com.chicorski.chicofoodapi.api.model.input.UsuarioComSenhaInput;
 import com.chicorski.chicofoodapi.api.model.input.UsuarioInput;
+import com.chicorski.chicofoodapi.api.openapi.controller.UsuarioControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.model.Usuario;
 import com.chicorski.chicofoodapi.domain.repository.UsuarioRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/usuarios")
-public class UsuarioController {
+@RequestMapping(value = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
