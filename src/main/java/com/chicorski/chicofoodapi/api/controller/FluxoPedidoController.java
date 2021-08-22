@@ -1,13 +1,15 @@
 package com.chicorski.chicofoodapi.api.controller;
 
+import com.chicorski.chicofoodapi.api.openapi.controller.FluxoPedidoContrllerOpenApi;
 import com.chicorski.chicofoodapi.domain.service.FluxoPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/pedidos/{codigo}")
-public class FluxoPedidoController {
+@RequestMapping(value = "/pedidos/{codigo}", produces = MediaType.APPLICATION_JSON_VALUE)
+public class FluxoPedidoController implements FluxoPedidoContrllerOpenApi {
 
     @Autowired
     private FluxoPedidoService fluxoPedido;
