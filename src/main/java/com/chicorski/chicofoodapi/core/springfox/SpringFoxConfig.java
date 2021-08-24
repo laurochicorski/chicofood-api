@@ -1,4 +1,4 @@
-package com.chicorski.chicofoodapi.core.openapi;
+package com.chicorski.chicofoodapi.core.springfox;
 
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
 import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;

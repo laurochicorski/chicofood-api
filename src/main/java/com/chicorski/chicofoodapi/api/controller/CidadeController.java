@@ -12,6 +12,7 @@ import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.repository.CidadeRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,7 +54,14 @@ public class CidadeController implements CidadeControllerOpenApi {
     public CidadeModel buscar(@PathVariable Long id) {
         Cidade cidade = cadastroCidade.buscarOuFalhar(id);
 
-        return cidadeModelAssembler.toModel(cidade);
+        CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
+
+        cidadeModel.add(new Link("http://127.0.0.1:8180/cidades/1"));
+        cidadeModel.add(new Link("http://127.0.0.1:8180/cidades", "cidades"));
+
+        cidadeModel.getEstado().add(new Link("http://127.0.0.1:8180/estados/1"));
+
+        return cidadeModel;
     }
 
     @PostMapping
