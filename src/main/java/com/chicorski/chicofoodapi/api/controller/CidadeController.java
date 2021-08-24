@@ -3,28 +3,23 @@ package com.chicorski.chicofoodapi.api.controller;
 import com.chicorski.chicofoodapi.api.ResourceUriHelper;
 import com.chicorski.chicofoodapi.api.assembler.CidadeInputDisassembler;
 import com.chicorski.chicofoodapi.api.assembler.CidadeModelAssembler;
-import com.chicorski.chicofoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import com.chicorski.chicofoodapi.api.model.CidadeModel;
 import com.chicorski.chicofoodapi.api.model.input.CidadeInput;
+import com.chicorski.chicofoodapi.api.openapi.controller.CidadeControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.exception.EstadoNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.repository.CidadeRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 
 @RestController
@@ -56,10 +51,16 @@ public class CidadeController implements CidadeControllerOpenApi {
 
         CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
 
-        cidadeModel.add(new Link("http://127.0.0.1:8180/cidades/1"));
-        cidadeModel.add(new Link("http://127.0.0.1:8180/cidades", "cidades"));
+        cidadeModel.add(linkTo(CidadeController.class)
+                .slash(cidadeModel.getId())
+                .withSelfRel());
 
-        cidadeModel.getEstado().add(new Link("http://127.0.0.1:8180/estados/1"));
+        cidadeModel.add(linkTo(CidadeController.class)
+                .withRel("cidades"));
+
+        cidadeModel.add(linkTo(EstadoController.class)
+                .slash(cidadeModel.getEstado().getId())
+                .withSelfRel());
 
         return cidadeModel;
     }
