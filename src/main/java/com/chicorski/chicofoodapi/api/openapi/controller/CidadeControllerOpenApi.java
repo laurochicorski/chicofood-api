@@ -3,16 +3,14 @@ package com.chicorski.chicofoodapi.api.openapi.controller;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.CidadeModel;
 import com.chicorski.chicofoodapi.api.model.input.CidadeInput;
-import com.chicorski.chicofoodapi.domain.model.Cidade;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Cidades")
 public interface CidadeControllerOpenApi {
 
     @ApiOperation("Lista as cidades")
-    List<CidadeModel> listar();
+    CollectionModel<CidadeModel> listar();
 
     @ApiOperation("Busca cidade por id")
     @ApiResponses({

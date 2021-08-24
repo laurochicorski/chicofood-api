@@ -12,7 +12,7 @@ import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.repository.CidadeRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +41,28 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CadastroCidadeService cadastroCidade;
 
     @GetMapping
-    public List<CidadeModel> listar() {
+    public CollectionModel<CidadeModel> listar() {
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
-        return cidadeModelAssembler.toCollectionModel(todasCidades);
+        List<CidadeModel> cidadeModels = cidadeModelAssembler.toCollectionModel(todasCidades);
+
+        cidadeModels.forEach(cidadeModel -> {
+            cidadeModel.add(linkTo(methodOn(CidadeController.class)
+                    .buscar(cidadeModel.getId()))
+                    .withSelfRel());
+
+            cidadeModel.add(linkTo(methodOn(CidadeController.class).listar())
+                    .withRel("cidades"));
+
+            cidadeModel.add(linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId()))
+                    .withSelfRel());
+        });
+
+        CollectionModel<CidadeModel> cidadesCollectionModel = new CollectionModel<>(cidadeModels);
+
+        cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
+
+        return cidadesCollectionModel;
     }
 
     @GetMapping("/{id}")
