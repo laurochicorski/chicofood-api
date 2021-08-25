@@ -5,24 +5,19 @@ import com.chicorski.chicofoodapi.api.assembler.CozinhaModelAssembler;
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
 import com.chicorski.chicofoodapi.api.model.input.CozinhaInput;
 import com.chicorski.chicofoodapi.api.openapi.controller.CozinhaControllerOpenApi;
-import com.chicorski.chicofoodapi.domain.exception.EntidadeEmUsoException;
-import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import com.chicorski.chicofoodapi.domain.repository.CozinhaRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCozinhaService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -40,13 +35,17 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private CozinhaInputDisassembler cozinhaInputDisassembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
+
     @GetMapping
-    public Page<CozinhaModel> listar(@PageableDefault Pageable pageable) {
+    public PagedModel<CozinhaModel> listar(@PageableDefault Pageable pageable) {
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
 
-        List<CozinhaModel> cozinhasModel = cozinhaModelAssembler.toCollectionModel(cozinhasPage.getContent());
+        PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler
+                .toModel(cozinhasPage, cozinhaModelAssembler);
 
-        return new PageImpl<>(cozinhasModel, pageable, cozinhasPage.getTotalElements());
+        return cozinhasPagedModel;
     }
 
     @GetMapping("/{cozinhaId}")
