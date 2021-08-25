@@ -9,6 +9,7 @@ import com.chicorski.chicofoodapi.domain.model.Estado;
 import com.chicorski.chicofoodapi.domain.repository.EstadoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroEstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class EstadoController implements EstadoControllerOpenApi {
     private CadastroEstadoService cadastroEstado;
 
     @GetMapping
-    public List<EstadoModel> listar() {
+    public CollectionModel<EstadoModel> listar() {
         List<Estado> todosEstados = estadoRepository.findAll();
 
         return estadoModelAssembler.toCollectionModel(todosEstados);
