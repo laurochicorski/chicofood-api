@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.assembler;
 
+import com.chicorski.chicofoodapi.api.ChicoLinks;
 import com.chicorski.chicofoodapi.api.controller.*;
 import com.chicorski.chicofoodapi.api.model.PedidoModel;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
@@ -24,6 +25,9 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ChicoLinks chicoLinks;
+
     public PedidoModelAssembler() {
         super(PedidoController.class, PedidoModel.class);
     }
@@ -32,22 +36,7 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
         PedidoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
-
-        TemplateVariables pageVariables = new TemplateVariables(
-                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
-        );
-
-        TemplateVariables filtroVariables = new TemplateVariables(
-                new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
-                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM));
-
-        pedidoModel.add(new Link(UriTemplate.of(pedidosUrl,
-                pageVariables.concat(filtroVariables)), "pedidos"));
+        pedidoModel.add(chicoLinks.linkToPedidos());
 
         pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
 
