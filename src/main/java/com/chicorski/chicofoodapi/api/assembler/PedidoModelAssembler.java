@@ -40,8 +40,14 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
                 new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
         );
 
-        pedidoModel.add(new Link(UriTemplate.of(pedidosUrl
-                , pageVariables), "pedidos"));
+        TemplateVariables filtroVariables = new TemplateVariables(
+                new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM));
+
+        pedidoModel.add(new Link(UriTemplate.of(pedidosUrl,
+                pageVariables.concat(filtroVariables)), "pedidos"));
 
         pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
 
