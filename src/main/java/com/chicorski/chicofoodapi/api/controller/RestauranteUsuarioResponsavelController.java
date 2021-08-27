@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.controller;
 
+import com.chicorski.chicofoodapi.api.ChicoLinks;
 import com.chicorski.chicofoodapi.api.assembler.UsuarioModelAssembler;
 import com.chicorski.chicofoodapi.api.model.UsuarioModel;
 import com.chicorski.chicofoodapi.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
@@ -24,13 +25,17 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private UsuarioModelAssembler usuarioModelAssembler;
 
+    @Autowired
+    private ChicoLinks chicoLinks;
+
+    @Override
     @GetMapping
     public CollectionModel<UsuarioModel> listar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         return usuarioModelAssembler.toCollectionModel(restaurante.getResponsaveis())
                 .removeLinks()
-                .add(linkTo(methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withSelfRel());
+                .add(chicoLinks.linkToResponsaveisRestaurante(restauranteId));
     }
 
     @DeleteMapping("/{usuarioId}")

@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.assembler;
 
+import com.chicorski.chicofoodapi.api.ChicoLinks;
 import com.chicorski.chicofoodapi.api.controller.PedidoController;
 import com.chicorski.chicofoodapi.api.controller.RestauranteController;
 import com.chicorski.chicofoodapi.api.controller.UsuarioController;
@@ -23,6 +24,9 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ChicoLinks chicoLinks;
+
     public PedidoResumoModelAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
     }
@@ -32,13 +36,12 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
         PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(linkTo(PedidoController.class).withRel("pedidos"));
+        pedidoModel.add(chicoLinks.linkToPedidos());
 
-        pedidoModel.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
-                .buscar(pedido.getRestaurante().getId())).withSelfRel());
+        pedidoModel.getRestaurante().add(
+                chicoLinks.linkToRestaurante(pedido.getRestaurante().getId()));
 
-        pedidoModel.getCliente().add(linkTo(methodOn(UsuarioController.class)
-                .buscar(pedido.getCliente().getId())).withSelfRel());
+        pedidoModel.getCliente().add(chicoLinks.linkToUsuario(pedido.getCliente().getId()));
 
         return pedidoModel;
     }

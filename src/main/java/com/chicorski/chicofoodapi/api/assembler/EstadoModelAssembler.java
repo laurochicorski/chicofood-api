@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.api.assembler;
 
+import com.chicorski.chicofoodapi.api.ChicoLinks;
 import com.chicorski.chicofoodapi.api.controller.EstadoController;
 import com.chicorski.chicofoodapi.api.model.EstadoModel;
 import com.chicorski.chicofoodapi.domain.model.Estado;
@@ -22,15 +23,19 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ChicoLinks chicoLinks;
+
     public EstadoModelAssembler() {
         super(EstadoController.class, EstadoModel.class);
     }
 
+    @Override
     public EstadoModel toModel(Estado estado) {
         EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
         modelMapper.map(estado, estadoModel);
 
-        estadoModel.add(linkTo(EstadoController.class).withRel("estados"));
+        estadoModel.add(chicoLinks.linkToEstados("estados"));
 
         return estadoModel;
     }

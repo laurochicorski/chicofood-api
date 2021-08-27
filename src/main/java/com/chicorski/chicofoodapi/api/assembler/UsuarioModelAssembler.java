@@ -1,7 +1,7 @@
 package com.chicorski.chicofoodapi.api.assembler;
 
+import com.chicorski.chicofoodapi.api.ChicoLinks;
 import com.chicorski.chicofoodapi.api.controller.UsuarioController;
-import com.chicorski.chicofoodapi.api.controller.UsuarioGrupoController;
 import com.chicorski.chicofoodapi.api.model.UsuarioModel;
 import com.chicorski.chicofoodapi.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
@@ -10,18 +10,16 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<Usuario, UsuarioModel> {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ChicoLinks chicoLinks;
 
     public UsuarioModelAssembler() {
         super(UsuarioController.class, UsuarioModel.class);
@@ -30,13 +28,11 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
     @Override
     public UsuarioModel toModel(Usuario usuario) {
         UsuarioModel usuarioModel = createModelWithId(usuario.getId(), usuario);
-
         modelMapper.map(usuario, usuarioModel);
 
-        usuarioModel.add(linkTo(UsuarioController.class).withRel("usuarios"));
+        usuarioModel.add(chicoLinks.linkToUsuarios("usuarios"));
 
-        usuarioModel.add(linkTo(methodOn(UsuarioGrupoController.class)
-                .listar(usuario.getId())).withRel("grupos-usuario"));
+        usuarioModel.add(chicoLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuario"));
 
         return usuarioModel;
     }
