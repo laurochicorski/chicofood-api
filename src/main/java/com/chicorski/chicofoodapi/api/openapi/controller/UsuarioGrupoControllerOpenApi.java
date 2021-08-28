@@ -4,8 +4,7 @@ import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.GrupoModel;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Usuários")
 public interface UsuarioGrupoControllerOpenApi {
@@ -22,7 +21,7 @@ public interface UsuarioGrupoControllerOpenApi {
             @ApiResponse(code = 404, message = "Usuário ou grupo não encontrado",
                     response = Problem.class)
     })
-    void desassociar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    ResponseEntity<Void> desassociar(@ApiParam(value = "ID do usuário", example = "1", required = true)
                      Long usuarioId,
 
                      @ApiParam(value = "ID do grupo", example = "1", required = true)
@@ -34,7 +33,7 @@ public interface UsuarioGrupoControllerOpenApi {
             @ApiResponse(code = 404, message = "Usuário ou grupo não encontrado",
                     response = Problem.class)
     })
-    void associar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    ResponseEntity<Void> associar(@ApiParam(value = "ID do usuário", example = "1", required = true)
                           Long usuarioId,
 
                   @ApiParam(value = "ID do grupo", example = "1", required = true)
