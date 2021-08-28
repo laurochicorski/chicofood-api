@@ -40,6 +40,6 @@ public class UsuarioModelAssembler extends RepresentationModelAssemblerSupport<U
     @Override
     public CollectionModel<UsuarioModel> toCollectionModel(Iterable<? extends Usuario> usuarios) {
         return super.toCollectionModel(usuarios)
-                .add(linkTo(UsuarioController.class).withSelfRel());
+                .add(chicoLinks.linkToCidades());
     }
 }

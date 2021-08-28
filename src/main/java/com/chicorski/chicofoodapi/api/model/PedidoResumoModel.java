@@ -33,6 +33,6 @@ public class PedidoResumoModel extends RepresentationModel<PedidoResumoModel> {
     private OffsetDateTime dataCriacao;
 
     private OffsetDateTime dataConfirmacao;
-    private RestauranteResumoModel restaurante;
+    private RestauranteApenasNomeModel restaurante;
     private UsuarioModel cliente;
 }

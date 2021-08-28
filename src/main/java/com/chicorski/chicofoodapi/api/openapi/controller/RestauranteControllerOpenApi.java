@@ -3,10 +3,10 @@ package com.chicorski.chicofoodapi.api.openapi.controller;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.RestauranteModel;
 import com.chicorski.chicofoodapi.api.model.input.RestauranteInput;
-import com.chicorski.chicofoodapi.api.model.view.RestauranteView;
 import com.chicorski.chicofoodapi.api.openapi.model.RestauranteBasicoModelOpenApi;
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ public interface RestauranteControllerOpenApi {
                     name = "projecao", paramType = "query", type = "string",
                     allowableValues = "apenas-nome")
     })
-    @JsonView(RestauranteView.Resumo.class)
-    List<RestauranteModel> listar();
+//    @JsonView(RestauranteView.Resumo.class)
+    CollectionModel<RestauranteModel> listar();
 
     @ApiOperation(value = "Lista restaurantes", hidden = true)
-    List<RestauranteModel> listarApenasNome();
+    CollectionModel<RestauranteModel> listarApenasNome();
 
     @ApiOperation("Busca um restaurante por ID")
     @ApiResponses({
@@ -51,7 +51,7 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante ativado com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    void ativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long id);
+    ResponseEntity<Void> ativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long id);
 
     @ApiOperation("Ativa múltiplos restaurantes")
     @ApiResponses({
@@ -70,19 +70,19 @@ public interface RestauranteControllerOpenApi {
             @ApiResponse(code = 204, message = "Restaurante inativado com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    void inativar( @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long id);
+    ResponseEntity<Void> inativar( @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long id);
 
     @ApiOperation("Abre um restaurante por ID")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurante aberto com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    void abrir( @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
+    ResponseEntity<Void> abrir( @ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 
     @ApiOperation("Fecha um restaurante por ID")
     @ApiResponses({
             @ApiResponse(code = 204, message = "Restaurante fechado com sucesso"),
             @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
     })
-    void fechar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
+    ResponseEntity<Void> fechar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 }
