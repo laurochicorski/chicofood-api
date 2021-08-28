@@ -16,18 +16,20 @@ public class ChicoLinks {
             new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
     );
 
-    public Link linkToPedidos() {
-        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
+    public static final TemplateVariables PROJECAO_VARIABLES = new TemplateVariables(
+            new TemplateVariable("projecao", TemplateVariable.VariableType.REQUEST_PARAM));
 
+    public Link linkToPedidos(String rel) {
         TemplateVariables filtroVariables = new TemplateVariables(
                 new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM));
 
-        return new Link(UriTemplate.of(pedidosUrl,
-                PAGINACAO_VARIABLES.concat(filtroVariables)), "pedidos");
+        String pedidosUrl = linkTo(PedidoController.class).toUri().toString();
 
+        return new Link(UriTemplate.of(pedidosUrl,
+                PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
     }
 
     public Link linkToRestaurante(Long restauranteId, String rel) {
@@ -148,7 +150,9 @@ public class ChicoLinks {
     }
 
     public Link linkToRestaurantes(String rel) {
-        return linkTo(RestauranteController.class).withRel(rel);
+        String restaurantesUrl = linkTo(RestauranteController.class).toUri().toString();
+
+        return new Link(UriTemplate.of(restaurantesUrl, PROJECAO_VARIABLES), rel);
     }
 
     public Link linkToRestaurantes() {
