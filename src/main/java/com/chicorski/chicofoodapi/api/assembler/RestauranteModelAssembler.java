@@ -31,18 +31,6 @@ public class RestauranteModelAssembler
 
         restauranteModel.add(chicoLinks.linkToRestaurantes("restaurantes"));
 
-        restauranteModel.getCozinha().add(
-                chicoLinks.linkToCozinha(restaurante.getCozinha().getId()));
-
-        restauranteModel.getEndereco().getCidade().add(
-                chicoLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
-
-        restauranteModel.add(chicoLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
-                "formas-pagamento"));
-
-        restauranteModel.add(chicoLinks.linkToResponsaveisRestaurante(restaurante.getId(),
-                "responsaveis"));
-
         if (restaurante.ativacaoPermitida()) {
             restauranteModel.add(
                     chicoLinks.linkToRestauranteAtivacao(restaurante.getId(), "ativar"));
@@ -62,6 +50,23 @@ public class RestauranteModelAssembler
             restauranteModel.add(
                     chicoLinks.linkToRestauranteFechamento(restaurante.getId(), "fechar"));
         }
+
+        restauranteModel.add(chicoLinks.linkToProdutos(restaurante.getId(), "produtos"));
+
+        restauranteModel.getCozinha().add(
+                chicoLinks.linkToCozinha(restaurante.getCozinha().getId()));
+
+        if (restauranteModel.getEndereco() != null
+                && restauranteModel.getEndereco().getCidade() != null) {
+            restauranteModel.getEndereco().getCidade().add(
+                    chicoLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        }
+
+        restauranteModel.add(chicoLinks.linkToRestauranteFormasPagamento(restaurante.getId(),
+                "formas-pagamento"));
+
+        restauranteModel.add(chicoLinks.linkToRestauranteResponsaveis(restaurante.getId(),
+                "responsaveis"));
 
         return restauranteModel;
     }
