@@ -1,11 +1,13 @@
 package com.chicorski.chicofoodapi.api.controller;
 
+import com.chicorski.chicofoodapi.api.ChicoLinks;
 import com.chicorski.chicofoodapi.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.chicorski.chicofoodapi.domain.filter.VendaDiariaFilter;
 import com.chicorski.chicofoodapi.domain.model.dto.VendaDiaria;
 import com.chicorski.chicofoodapi.domain.service.VendaQueryService;
 import com.chicorski.chicofoodapi.domain.service.VendaReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     @Autowired
     private VendaReportService vendaReportService;
 
+    @Autowired
+    private ChicoLinks algaLinks;
+
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendaDiarias(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
         return vendaQueryService.consultarVendasDiarias(filtro, timeOffSet);
@@ -42,5 +47,18 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
                 .contentType(MediaType.APPLICATION_PDF)
                 .headers(headers)
                 .body(bytesPdf);
+    }
+
+    @Override
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public EstatisticasModel estatisticas() {
+        var estatisticasModel = new EstatisticasModel();
+
+        estatisticasModel.add(algaLinks.linkToEstatisticasVendasDiarias("vendas-diarias"));
+
+        return estatisticasModel;
+    }
+
+    public static class EstatisticasModel extends RepresentationModel<EstatisticasModel> {
     }
 }

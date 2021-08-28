@@ -1,11 +1,10 @@
 package com.chicorski.chicofoodapi.api.openapi.controller;
 
+import com.chicorski.chicofoodapi.api.controller.EstatisticasController;
 import com.chicorski.chicofoodapi.domain.filter.VendaDiariaFilter;
 import com.chicorski.chicofoodapi.domain.model.dto.VendaDiaria;
 import io.swagger.annotations.*;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -28,4 +27,7 @@ public interface EstatisticasControllerOpenApi {
     ResponseEntity<byte[]> consultarVendaDiariasPdf(
             VendaDiariaFilter filtro,
             String timeOffset);
+
+    @ApiOperation(value = "Estatísticas", hidden = true)
+    EstatisticasController.EstatisticasModel estatisticas();
 }

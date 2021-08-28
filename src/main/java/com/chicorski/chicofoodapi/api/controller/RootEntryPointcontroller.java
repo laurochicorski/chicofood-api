@@ -29,6 +29,7 @@ public class RootEntryPointcontroller {
         rootEntryPointModel.add(chicoLinks.linkToFormasPagamento("formas-pagamento"));
         rootEntryPointModel.add(chicoLinks.linkToEstados("estados"));
         rootEntryPointModel.add(chicoLinks.linkToCidades("cidades"));
+        rootEntryPointModel.add(chicoLinks.linkToEstatisticas("estatisticas"));
 
         return rootEntryPointModel;
     }
