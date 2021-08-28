@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.core.springfox;
 
+import com.chicorski.chicofoodapi.api.model.CidadeModel;
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
 import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;
 import com.chicorski.chicofoodapi.api.openapi.model.CozinhasModelOpenApi;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -72,6 +74,10 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, PedidoResumoModel.class),
                             PedidosResumoModelOpenApi.class
+                ))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeModel.class),
+                        CidadesModelOpenApi.class
                 ))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
