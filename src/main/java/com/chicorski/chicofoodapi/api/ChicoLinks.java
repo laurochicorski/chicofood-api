@@ -201,6 +201,10 @@ public class ChicoLinks {
         return linkTo(methodOn(RestauranteFormaPagamentoController.class).desassociar(restauranteId, formaPagamentoId)).withRel(rel);
     }
 
+    public Link linkToRestauranteFormaPagamentoAssociacao(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class).associar(restauranteId, null)).withRel(rel);
+    }
+
     public Link linkToFormasPagamento(String rel) {
         return linkTo(FormaPagamentoController.class).withRel(rel);
     }
