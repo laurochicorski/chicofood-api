@@ -9,6 +9,7 @@ import com.chicorski.chicofoodapi.domain.model.Grupo;
 import com.chicorski.chicofoodapi.domain.repository.GrupoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -32,11 +33,12 @@ public class GrupoController implements GrupoControllerOpenApi {
     @Autowired
     private GrupoInputDisassembler grupoInputDisassembler;
 
+    @Override
     @GetMapping
-    public List<GrupoModel> listar() {
-        List<Grupo> grupos = grupoRepository.findAll();
+    public CollectionModel<GrupoModel> listar() {
+        List<Grupo> todosGrupos = grupoRepository.findAll();
 
-        return grupoModelAssembler.toColelctionModel(grupos);
+        return grupoModelAssembler.toCollectionModel(todosGrupos);
     }
 
     @GetMapping("/{id}")

@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.openapi.controller;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.GrupoModel;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface UsuarioGrupoControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    List<GrupoModel> listar(@ApiParam(value = "ID do usuário", example = "1", required = true) Long usuarioId);
+    CollectionModel<GrupoModel> listar(@ApiParam(value = "ID do usuário", example = "1", required = true) Long usuarioId);
 
     @ApiOperation("Desassociação de grupo com usuário")
     @ApiResponses({

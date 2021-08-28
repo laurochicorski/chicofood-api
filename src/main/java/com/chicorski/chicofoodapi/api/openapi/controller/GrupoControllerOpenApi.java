@@ -4,6 +4,7 @@ import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.model.GrupoModel;
 import com.chicorski.chicofoodapi.api.model.input.GrupoInput;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public interface GrupoControllerOpenApi {
 
     @ApiOperation("Lista os grupos")
-    List<GrupoModel> listar();
+    CollectionModel<GrupoModel> listar();
 
     @ApiOperation("Busca um grupo por ID")
     @ApiResponses({

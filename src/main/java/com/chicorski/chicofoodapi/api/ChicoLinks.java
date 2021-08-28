@@ -242,4 +242,17 @@ public class ChicoLinks {
     public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
         return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToGrupos(String rel) {
+        return linkTo(GrupoController.class).withRel(rel);
+    }
+
+    public Link linkToGrupos() {
+        return linkToGrupos(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class)
+                .listar(grupoId)).withRel(rel);
+    }
 }

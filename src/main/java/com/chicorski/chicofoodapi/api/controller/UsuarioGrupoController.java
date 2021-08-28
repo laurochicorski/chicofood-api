@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.api.openapi.controller.UsuarioGrupoControllerO
 import com.chicorski.chicofoodapi.domain.model.Usuario;
 import com.chicorski.chicofoodapi.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +23,13 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     @Autowired
     private GrupoModelAssembler grupoModelAssembler;
 
+    @Override
     @GetMapping
-    public List<GrupoModel> listar(@PathVariable Long usuarioId) {
+    public CollectionModel<GrupoModel> listar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
 
-        return grupoModelAssembler.toColelctionModel(usuario.getGrupos());
+        return grupoModelAssembler.toCollectionModel(usuario.getGrupos())
+                .removeLinks();
     }
 
     @DeleteMapping("/{grupoId}")
