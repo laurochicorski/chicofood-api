@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.core.springfox;
 import com.chicorski.chicofoodapi.api.model.CozinhaModel;
 import com.chicorski.chicofoodapi.api.model.PedidoResumoModel;
 import com.chicorski.chicofoodapi.api.openapi.model.CozinhasModelOpenApi;
+import com.chicorski.chicofoodapi.api.openapi.model.LinksModelOpenApi;
 import com.chicorski.chicofoodapi.api.openapi.model.PageableModelOpenApi;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.chicorski.chicofoodapi.api.openapi.model.PedidosResumoModelOpenApi;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -62,6 +64,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         URL.class, URI.class, URLStreamHandler.class, Resource.class, File.class,
                         InputStream.class)
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, CozinhaModel.class),
                             CozinhasModelOpenApi.class
