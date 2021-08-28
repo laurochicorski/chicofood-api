@@ -1,6 +1,8 @@
 package com.chicorski.chicofoodapi.core.springfox;
 
 import com.chicorski.chicofoodapi.api.model.*;
+import com.chicorski.chicofoodapi.api.openapi.GruposModelOpenApi;
+import com.chicorski.chicofoodapi.api.openapi.PermissoesModelOpenApi;
 import com.chicorski.chicofoodapi.api.openapi.model.*;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.fasterxml.classmate.TypeResolver;
@@ -81,6 +83,13 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, FormaPagamentoModel.class),
                         FormasPagamentoModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, GrupoModel.class),
+                        GruposModelOpenApi.class))
+
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, PermissaoModel.class),
+                        PermissoesModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
