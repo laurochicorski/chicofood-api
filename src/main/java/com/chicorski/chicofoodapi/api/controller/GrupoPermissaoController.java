@@ -6,8 +6,10 @@ import com.chicorski.chicofoodapi.api.openapi.controller.GrupoPermissaoControlle
 import com.chicorski.chicofoodapi.domain.model.Grupo;
 import com.chicorski.chicofoodapi.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     private PermissaoModelAssembler permissaoModelAssembler;
 
     @GetMapping
-    public List<PermissaoModel> listar(@PathVariable Long grupoId) {
+    public CollectionModel<PermissaoModel> listar(@PathVariable Long grupoId) {
         Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
 
         return permissaoModelAssembler.toCollectionModel(grupo.getPermissoes());
@@ -31,14 +33,18 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
 
     @DeleteMapping("/{permissaoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+    public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         cadastroGrupo.desassociarPermissao(grupoId, permissaoId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{permissaoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
+    public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         cadastroGrupo.associarPermissao(grupoId, permissaoId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
