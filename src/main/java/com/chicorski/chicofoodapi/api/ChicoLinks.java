@@ -67,13 +67,13 @@ public class ChicoLinks {
         return linkToGruposUsuario(usuarioId, IanaLinkRelations.SELF.value());
     }
 
-    public Link linkToResponsaveisRestaurante(Long restauranteId, String rel) {
+    public Link linkToRestauranteResponsaveis(Long restauranteId, String rel) {
         return linkTo(methodOn(RestauranteUsuarioResponsavelController.class)
                 .listar(restauranteId)).withRel(rel);
     }
 
-    public Link linkToResponsaveisRestaurante(Long restauranteId) {
-        return linkToResponsaveisRestaurante(restauranteId, IanaLinkRelations.SELF.value());
+    public Link linkToRestauranteResponsaveis(Long restauranteId) {
+        return linkToRestauranteResponsaveis(restauranteId, IanaLinkRelations.SELF.value());
     }
 
     public Link linkToFormaPagamento(Long formaPagamentoId, String rel) {
@@ -225,5 +225,12 @@ public class ChicoLinks {
                 .associar(restauranteId, null)).withRel(rel);
     }
 
+    public Link linkToProdutos(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteProdutoController.class)
+                .buscar(restauranteId, null)).withRel(rel);
+    }
 
+    public Link linkToProdutos(Long restauranteId) {
+        return linkToProdutos(restauranteId, IanaLinkRelations.SELF.value());
+    }
 }
