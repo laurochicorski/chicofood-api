@@ -19,7 +19,6 @@ public interface RestauranteControllerOpenApi {
                     name = "projecao", paramType = "query", type = "string",
                     allowableValues = "apenas-nome")
     })
-//    @JsonView(RestauranteView.Resumo.class)
     CollectionModel<RestauranteModel> listar();
 
     @ApiOperation(value = "Lista restaurantes", hidden = true)
