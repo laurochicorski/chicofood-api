@@ -7,6 +7,7 @@ import com.chicorski.chicofoodapi.api.openapi.model.RestauranteBasicoModelOpenAp
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public interface RestauranteControllerOpenApi {
     })
     CollectionModel<RestauranteModel> listar();
 
+    @ApiIgnore
     @ApiOperation(value = "Lista restaurantes", hidden = true)
     CollectionModel<RestauranteModel> listarApenasNome();
 
