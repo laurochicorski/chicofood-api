@@ -12,8 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import static com.chicorski.chicofoodapi.core.web.ChicoMediaTypes.V1_APPLICATION_JSON;
-import static com.chicorski.chicofoodapi.core.web.ChicoMediaTypes.V1_APPLICATION_JSON_VALUE;
+import static com.chicorski.chicofoodapi.core.web.ChicoMediaTypes.*;
 
 // Fonte: https://github.com/spring-projects/spring-hateoas/issues/263#issuecomment-358969098
 @Component
@@ -34,7 +33,7 @@ public class HalCustomMediaTypeEnabler {
 
                 MappingJackson2HttpMessageConverter messageConverter = (MappingJackson2HttpMessageConverter) converter;
                 messageConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON,
-                        V1_APPLICATION_JSON));
+                        V1_APPLICATION_JSON, V2_APPLICATION_JSON));
             }
         }
     }

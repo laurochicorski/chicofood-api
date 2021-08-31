@@ -1,1 +1,1 @@
- sudo docker run --name chicofood-mysql -e MYSQL_ROOT_PASSWORD=12346 -e MYSQL_DATABASE=chicofood -e MYSQL_USER=development -e MYSQL_PASSWORD=123456 -p 3306:3306 -d mysql:5.7
+sudo docker run --name chicofood-mysql -e MYSQL_ROOT_PASSWORD=12346 -e MYSQL_DATABASE=chicofood -e MYSQL_USER=development -e MYSQL_PASSWORD=123456 -p 3306:3306 -d mysql:5.7
