@@ -1,6 +1,6 @@
 package com.chicorski.chicofoodapi.core.springfox;
 
-import com.chicorski.chicofoodapi.api.model.CidadeModel;
+import com.chicorski.chicofoodapi.api.v1.model.CidadeModel;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.springframework.hateoas.Link;

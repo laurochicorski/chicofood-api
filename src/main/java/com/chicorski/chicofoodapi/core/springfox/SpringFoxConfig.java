@@ -1,9 +1,9 @@
 package com.chicorski.chicofoodapi.core.springfox;
 
-import com.chicorski.chicofoodapi.api.model.*;
-import com.chicorski.chicofoodapi.api.openapi.GruposModelOpenApi;
-import com.chicorski.chicofoodapi.api.openapi.PermissoesModelOpenApi;
-import com.chicorski.chicofoodapi.api.openapi.model.*;
+import com.chicorski.chicofoodapi.api.v1.model.*;
+import com.chicorski.chicofoodapi.api.v1.openapi.GruposModelOpenApi;
+import com.chicorski.chicofoodapi.api.v1.openapi.PermissoesModelOpenApi;
+import com.chicorski.chicofoodapi.api.v1.openapi.model.*;
 import com.chicorski.chicofoodapi.api.exceptionHandler.Problem;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;

@@ -1,11 +1,9 @@
 package com.chicorski.chicofoodapi.core.modelmapper;
 
-import com.chicorski.chicofoodapi.api.model.EnderecoModel;
-import com.chicorski.chicofoodapi.api.model.RestauranteModel;
-import com.chicorski.chicofoodapi.api.model.input.ItemPedidoInput;
+import com.chicorski.chicofoodapi.api.v1.model.EnderecoModel;
+import com.chicorski.chicofoodapi.api.v1.model.input.ItemPedidoInput;
 import com.chicorski.chicofoodapi.domain.model.Endereco;
 import com.chicorski.chicofoodapi.domain.model.ItemPedido;
-import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
