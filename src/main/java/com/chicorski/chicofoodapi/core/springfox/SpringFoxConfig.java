@@ -190,8 +190,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
-                .title("ChicoFood API")
-                .description("API aberta para clientes e restaurantes")
+                .title("ChicoFood API (Depreciada)")
+                .description("API aberta para clientes e restaurantes.<br>" +
+                        "<strong> API depreciada. Use a versão mais atual.</strong>")
                 .version("1")
                 .contact(new Contact("Chicofood", "http://www.chicofood.com", "contato@chicofood.com"))
                 .build();
