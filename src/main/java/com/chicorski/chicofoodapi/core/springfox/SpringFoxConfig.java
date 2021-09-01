@@ -46,13 +46,14 @@ import java.util.List;
 public class SpringFoxConfig implements WebMvcConfigurer {
 
     @Bean
-    public Docket apiDocket() {
+    public Docket apiDocketV1() {
         var typeResolver = new TypeResolver();
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V1")
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("com.chicorski.chicofoodapi.api"))
-                    .paths(PathSelectors.any())
+                    .paths(PathSelectors.ant("/v1/**"))
                     .build()
                 .useDefaultResponseMessages(false)
                 .globalResponseMessage(RequestMethod.GET, globalGetReponseMessages())
@@ -103,7 +104,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
                         UsuariosModelOpenApi.class))
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .tags(new Tag("Cidades", "Gerencia as cidades"),
                         new Tag("Grupos", "Gerencia os grupos de usuários"),
                         new Tag("Cozinhas", "Gerencia as cozinhas"),
@@ -115,6 +116,30 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         new Tag("Usuários", "Gerencia os usuários"),
                         new Tag("Estatísticas", "Estatísticas da ChicoFood"),
                         new Tag("Permissões", "Gerencia as permissões"));
+    }
+
+    @Bean
+    public Docket apiDocketV2() {
+        var typeResolver = new TypeResolver();
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.chicorski.chicofoodapi.api"))
+                .paths(PathSelectors.ant("/v2/**"))
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponseMessage(RequestMethod.GET, globalGetReponseMessages())
+                .globalResponseMessage(RequestMethod.POST, globalPostPutReponseMessages())
+                .globalResponseMessage(RequestMethod.PUT, globalPostPutReponseMessages())
+                .globalResponseMessage(RequestMethod.DELETE, globalDeleteReponseMessages())
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .ignoredParameterTypes(ServletWebRequest.class,
+                        URL.class, URI.class, URLStreamHandler.class, Resource.class, File.class,
+                        InputStream.class)
+                .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .apiInfo(apiInfoV2());
     }
 
     private List<ResponseMessage> globalDeleteReponseMessages() {
@@ -163,11 +188,20 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         .build());
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("ChicoFood API")
                 .description("API aberta para clientes e restaurantes")
                 .version("1")
+                .contact(new Contact("Chicofood", "http://www.chicofood.com", "contato@chicofood.com"))
+                .build();
+    }
+
+    private ApiInfo apiInfoV2() {
+        return new ApiInfoBuilder()
+                .title("ChicoFood API")
+                .description("API aberta para clientes e restaurantes")
+                .version("2")
                 .contact(new Contact("Chicofood", "http://www.chicofood.com", "contato@chicofood.com"))
                 .build();
     }
