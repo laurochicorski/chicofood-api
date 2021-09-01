@@ -21,11 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     }
 
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.defaultContentType(ChicoMediaTypes.V2_APPLICATION_JSON);
-    }
-
     @Bean
     public Filter shallowEtagHeaderFilter() {
         return new ShallowEtagHeaderFilter();

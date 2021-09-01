@@ -13,16 +13,15 @@ import com.chicorski.chicofoodapi.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.chicorski.chicofoodapi.core.web.ChicoMediaTypes.V2_APPLICATION_JSON_VALUE;
-
 
 @RestController
-@RequestMapping(path ="/cidades", produces = V2_APPLICATION_JSON_VALUE)
+@RequestMapping(path ="/v2/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeControllerV2 {
 
     @Autowired
