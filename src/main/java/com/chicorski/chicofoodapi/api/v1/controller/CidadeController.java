@@ -11,6 +11,8 @@ import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import com.chicorski.chicofoodapi.domain.repository.CidadeRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroCidadeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path ="/v1/cidades", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CidadeController implements CidadeControllerOpenApi {
+
+    private static final Logger logger = LoggerFactory.getLogger(CozinhaController.class);
 
     @Autowired
     private CidadeModelAssembler cidadeModelAssembler;
@@ -40,6 +44,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Deprecated
     @GetMapping
     public CollectionModel<CidadeModel> listar() {
+        logger.info("Consultando cidades....");
         List<Cidade> todasCidades = cidadeRepository.findAll();
 
         return cidadeModelAssembler.toCollectionModel(todasCidades);
