@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/pedidos/{codigo}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/pedidos/{codigo}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FluxoPedidoController implements FluxoPedidoContrllerOpenApi {
 
     @Autowired
