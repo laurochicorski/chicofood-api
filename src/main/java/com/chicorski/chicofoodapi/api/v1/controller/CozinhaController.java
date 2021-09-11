@@ -18,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,14 +43,11 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public PagedModel<CozinhaModel> listar(@PageableDefault Pageable pageable) {
         log.info("Consultando cozinhas com páginas de {} registros...", pageable.getPageSize());
         Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
-
-        if (true) {
-            throw new RuntimeException("Teste de exception");
-        }
 
         PagedModel<CozinhaModel> cozinhasPagedModel = pagedResourcesAssembler
                 .toModel(cozinhasPage, cozinhaModelAssembler);
@@ -57,6 +55,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhasPagedModel;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{cozinhaId}")
     public CozinhaModel buscar(@PathVariable("cozinhaId") Long id) {
         Cozinha cozinha = cadastroCozinha.buscarOuFalhar(id);
@@ -64,6 +63,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaModelAssembler.toModel(cozinha);
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaModel adicionar(@RequestBody  @Valid CozinhaInput cozinhaInput) {
