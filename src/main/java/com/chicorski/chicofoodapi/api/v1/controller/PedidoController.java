@@ -9,6 +9,7 @@ import com.chicorski.chicofoodapi.api.v1.model.input.PedidoInput;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.chicorski.chicofoodapi.core.data.PageWrapper;
 import com.chicorski.chicofoodapi.core.data.PageableTranslator;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
@@ -52,6 +53,9 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     @GetMapping
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
                                                    @PageableDefault(size=10) Pageable pageable) {
@@ -78,9 +82,8 @@ public class PedidoController implements PedidoControllerOpenApi {
         try {
             Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 
-            // TODO pegar usuário autenticado
             novoPedido.setCliente(new Usuario());
-            novoPedido.getCliente().setId(1L);
+            novoPedido.getCliente().setId(chicoFoodSecurity.getUsuarioId());
 
             novoPedido = emissaoPedido.emitir(novoPedido);
 
