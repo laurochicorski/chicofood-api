@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.ProdutoModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.ProdutoModel;
 import com.chicorski.chicofoodapi.api.v1.model.input.ProdutoInput;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.RestauranteProdutoControllerOpenApi;
+import com.chicorski.chicofoodapi.core.security.CheckSecurity;
 import com.chicorski.chicofoodapi.domain.model.Produto;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import com.chicorski.chicofoodapi.domain.repository.ProdutoRepository;
@@ -42,6 +43,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     public CollectionModel<ProdutoModel> listar(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativos) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
@@ -59,6 +61,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
                 .add(chicoLinks.linkToProdutos(restauranteId));
     }
 
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping("/{produtoId}")
     public ProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
@@ -66,6 +69,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoModel adicionar(@PathVariable Long restauranteId,
@@ -80,6 +84,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         return produtoModelAssembler.toModel(produto);
     }
 
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{produtoId}")
     public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId,
                                   @RequestBody @Valid ProdutoInput produtoInput) {
