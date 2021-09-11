@@ -11,6 +11,7 @@ public enum ProblemType {
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),
     PARAMETRO_INVALIDO("/parametro-invalido", "Parametro inválido"),
     ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema"),
+    ACESSO_NEGADO("/acesso-negado", "Acesso negado"),
     DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos");
 
     private String title;
