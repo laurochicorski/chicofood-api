@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.domain.model.Grupo;
 import com.chicorski.chicofoodapi.domain.model.Usuario;
 import com.chicorski.chicofoodapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,9 @@ public class CadastroUsuarioService {
     @Autowired
     private CadastroGrupoService cadastroGrupo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public Usuario salvar(Usuario usuario) {
         usuarioRepository.detach(usuario);
@@ -28,6 +32,10 @@ public class CadastroUsuarioService {
 
         if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)){
             throw new NegocioException(String.format("Já existe um usuário cadastrado com o e-mail %s.", usuario.getEmail()));
+        }
+
+        if (usuario.isNovo()) {
+            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         }
 
         return usuarioRepository.save(usuario);
@@ -41,7 +49,7 @@ public class CadastroUsuarioService {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
         }
 
-        usuario.setSenha(novaSenha);
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
     }
 
     public Usuario buscarOuFalhar(Long usuarioId) {
