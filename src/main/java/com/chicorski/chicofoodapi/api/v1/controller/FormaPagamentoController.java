@@ -5,6 +5,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.FormaPagamentoModel;
 import com.chicorski.chicofoodapi.api.v1.model.input.FormaPagamentoInput;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.FormaPagamentoControllerOpenApi;
+import com.chicorski.chicofoodapi.core.security.CheckSecurity;
 import com.chicorski.chicofoodapi.domain.model.FormaPagamento;
 import com.chicorski.chicofoodapi.domain.repository.FormaPagamentoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroFormaPagamentoService;
@@ -38,6 +39,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     @Autowired
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping
     public ResponseEntity<CollectionModel<FormaPagamentoModel>> listar(ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -62,6 +64,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                 .body(formaPagamentoModelAssembler.toCollectionModel(formasPagamento));
     }
 
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping("/{id}")
     public ResponseEntity<FormaPagamentoModel> buscar(@PathVariable Long id, ServletWebRequest request) {
         ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
@@ -85,6 +88,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
                         .body(formaPagamentoModelAssembler.toModel(formaPagamento));
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoModel adicionar(@RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -95,6 +99,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoModelAssembler.toModel(formaPagamento);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping("/{id}")
     public FormaPagamentoModel atualizar(@PathVariable Long id,
                                          @RequestBody @Valid FormaPagamentoInput formaPagamentoInput) {
@@ -107,6 +112,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
         return formaPagamentoModelAssembler.toModel(formaPagamentoAtual);
     }
 
+    @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
