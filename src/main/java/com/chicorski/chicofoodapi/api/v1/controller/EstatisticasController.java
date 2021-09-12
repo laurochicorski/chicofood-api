@@ -2,6 +2,7 @@ package com.chicorski.chicofoodapi.api.v1.controller;
 
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.EstatisticasControllerOpenApi;
+import com.chicorski.chicofoodapi.core.security.CheckSecurity;
 import com.chicorski.chicofoodapi.domain.filter.VendaDiariaFilter;
 import com.chicorski.chicofoodapi.domain.model.dto.VendaDiaria;
 import com.chicorski.chicofoodapi.domain.service.VendaQueryService;
@@ -31,11 +32,13 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     @Autowired
     private ChicoLinks algaLinks;
 
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendaDiarias(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
         return vendaQueryService.consultarVendasDiarias(filtro, timeOffSet);
     }
 
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "/vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendaDiariasPdf(VendaDiariaFilter filtro, @RequestParam(required = false, defaultValue = "+00:00") String timeOffSet) {
         byte[] bytesPdf = vendaReportService.emitirVendasDiarias(filtro, timeOffSet);
@@ -49,6 +52,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
                 .body(bytesPdf);
     }
 
+    @CheckSecurity.Estatisticas.PodeConsultar
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public EstatisticasModel estatisticas() {
