@@ -5,6 +5,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.GrupoModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.GrupoControllerOpenApi;
 import com.chicorski.chicofoodapi.api.v1.model.GrupoModel;
 import com.chicorski.chicofoodapi.api.v1.model.input.GrupoInput;
+import com.chicorski.chicofoodapi.core.security.CheckSecurity;
 import com.chicorski.chicofoodapi.domain.model.Grupo;
 import com.chicorski.chicofoodapi.domain.repository.GrupoRepository;
 import com.chicorski.chicofoodapi.domain.service.CadastroGrupoService;
@@ -33,6 +34,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     @Autowired
     private GrupoInputDisassembler grupoInputDisassembler;
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
     public CollectionModel<GrupoModel> listar() {
@@ -41,6 +43,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoModelAssembler.toCollectionModel(todosGrupos);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{id}")
     public GrupoModel buscar(@PathVariable Long id) {
         Grupo grupo = cadastroGrupo.buscarOuFalhar(id);
@@ -48,6 +51,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoModelAssembler.toModel(grupo);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoModel adicionar(@RequestBody @Valid GrupoInput grupoInput) {
@@ -58,6 +62,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoModelAssembler.toModel(grupo);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{id}")
     public GrupoModel atualizar(@PathVariable Long id,
                                          @RequestBody @Valid GrupoInput grupoInput) {
@@ -70,6 +75,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         return grupoModelAssembler.toModel(grupoAtual);
     }
 
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
