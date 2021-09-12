@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.*;
 import com.chicorski.chicofoodapi.api.v1.model.PedidoModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public PedidoModelAssembler() {
         super(PedidoController.class, PedidoModel.class);
     }
@@ -31,16 +35,18 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
 
         pedidoModel.add(chicoLinks.linkToPedidos("pedidos"));
 
-        if (pedido.podeSerConfirmado()) {
-            pedidoModel.add(chicoLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
-        }
+        if (chicoFoodSecurity.podeGerenciarPedidos(pedido.getCodigo())) {
+            if (pedido.podeSerConfirmado()) {
+                pedidoModel.add(chicoLinks.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmar"));
+            }
 
-        if (pedido.podeSerEntregue()) {
-            pedidoModel.add(chicoLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
-        }
+            if (pedido.podeSerEntregue()) {
+                pedidoModel.add(chicoLinks.linkToEntregaPedido(pedido.getCodigo(), "entregar"));
+            }
 
-        if (pedido.podeSerCancelado()) {
-            pedidoModel.add(chicoLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+            if (pedido.podeSerCancelado()) {
+                pedidoModel.add(chicoLinks.linkToCancelamentoPedido(pedido.getCodigo(), "cancelar"));
+            }
         }
 
         pedidoModel.getRestaurante().add(
