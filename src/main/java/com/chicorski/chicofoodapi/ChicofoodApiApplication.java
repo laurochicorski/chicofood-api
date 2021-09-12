@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi;
 
+import com.chicorski.chicofoodapi.core.io.Base64ProtocolResolver;
 import com.chicorski.chicofoodapi.infrastructure.repository.CustomJpaRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +14,11 @@ public class ChicofoodApiApplication {
 
 	public static void main(String[] args) {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		SpringApplication.run(ChicofoodApiApplication.class, args);
+
+		var app = new SpringApplication(ChicofoodApiApplication.class);
+		app.addListeners(new Base64ProtocolResolver());
+		app.run(args);
+//		SpringApplication.run(ChicofoodApiApplication.class, args);
 	}
 
 }
