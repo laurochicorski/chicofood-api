@@ -3,9 +3,7 @@ package com.chicorski.chicofoodapi.core.security;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.METHOD;
@@ -53,15 +51,15 @@ public @interface CheckSecurity {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
-                "@chicoFoodSecurity.getUsuarioId() == returnObject.cliente.id or" +
+                "@chicoFoodSecurity.usuarioAutenticado(returnObject.cliente.id) or" +
                 "@chicoFoodSecurity.gerenciaRestaurante(returnObject.restaurante.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeBuscar { }
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
-                + "@algaSecurity.getUsuarioId() == #filtro.clienteId or"
-                + "@algaSecurity.gerenciaRestaurante(#filtro.restauranteId))")
+                + "@chicoFoodSecurity.usuarioAutenticado(#filtro.clienteId) or"
+                + "@chicoFoodSecurity.gerenciaRestaurante(#filtro.restauranteId))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodePesquisar { }
@@ -72,7 +70,7 @@ public @interface CheckSecurity {
         public @interface PodeCriar { }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('GERENCIAR_PEDIDOS') or "
-                + "@algaSecurity.gerenciaRestauranteDoPedido(#codigoPedido))")
+                + "@chicoFoodSecurity.gerenciaRestauranteDoPedido(#codigoPedido))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeGerenciarPedidos {
@@ -124,13 +122,13 @@ public @interface CheckSecurity {
     public @interface UsuariosGruposPermissoes {
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-                + "@algaSecurity.getUsuarioId() == #usuarioId")
+                + "@chicoFoodSecurity.usuarioAutenticado(#usuarioId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeAlterarPropriaSenha { }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or "
-                + "@algaSecurity.getUsuarioId() == #usuarioId)")
+                + "@chicoFoodSecurity.usuarioAutenticado(#usuarioId))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeAlterarUsuario { }
