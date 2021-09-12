@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.PedidoController;
 import com.chicorski.chicofoodapi.api.v1.model.PedidoResumoModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Pedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public PedidoResumoModelAssembler() {
         super(PedidoController.class, PedidoResumoModel.class);
     }
@@ -29,12 +33,18 @@ public class PedidoResumoModelAssembler extends RepresentationModelAssemblerSupp
         PedidoResumoModel pedidoModel = createModelWithId(pedido.getCodigo(), pedido);
         modelMapper.map(pedido, pedidoModel);
 
-        pedidoModel.add(chicoLinks.linkToPedidos("pedidos"));
+        if (chicoFoodSecurity.podePesquisarPedidos()) {
+            pedidoModel.add(chicoLinks.linkToPedidos("pedidos"));
+        }
 
-        pedidoModel.getRestaurante().add(
-                chicoLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        if (chicoFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getRestaurante().add(
+                    chicoLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        }
 
-        pedidoModel.getCliente().add(chicoLinks.linkToUsuario(pedido.getCliente().getId()));
+        if (chicoFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getCliente().add(chicoLinks.linkToUsuario(pedido.getCliente().getId()));
+        }
 
         return pedidoModel;
     }

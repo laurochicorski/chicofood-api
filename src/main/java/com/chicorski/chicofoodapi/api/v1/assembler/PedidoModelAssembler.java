@@ -49,22 +49,33 @@ public class PedidoModelAssembler extends RepresentationModelAssemblerSupport<Pe
             }
         }
 
-        pedidoModel.getRestaurante().add(
-                chicoLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        if (chicoFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getRestaurante().add(
+                    chicoLinks.linkToRestaurante(pedido.getRestaurante().getId()));
+        }
 
-        pedidoModel.getCliente().add(
-                chicoLinks.linkToUsuario(pedido.getCliente().getId()));
+        if (chicoFoodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            pedidoModel.getCliente().add(
+                    chicoLinks.linkToUsuario(pedido.getCliente().getId()));
+        }
 
-        pedidoModel.getFormaPagamento().add(
-                chicoLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+        if (chicoFoodSecurity.podeConsultarFormasPagamento()) {
+            pedidoModel.getFormaPagamento().add(
+                    chicoLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
+        }
 
-        pedidoModel.getEnderecoEntrega().getCidade().add(
-                chicoLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+        if (chicoFoodSecurity.podeConsultarCidades()) {
+            pedidoModel.getEnderecoEntrega().getCidade().add(
+                    chicoLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
+        }
 
-        pedidoModel.getItens().forEach(item -> {
-            item.add(chicoLinks.linkToProduto(
-                    pedidoModel.getRestaurante().getId(), item.getProdutoId(), "produto"));
-        });
+        // Quem pode consultar restaurantes, também pode consultar os produtos dos restaurantes
+        if (chicoFoodSecurity.podeConsultarRestaurantes()) {
+            pedidoModel.getItens().forEach(item -> {
+                item.add(chicoLinks.linkToProduto(
+                        pedidoModel.getRestaurante().getId(), item.getProdutoId(), "produto"));
+            });
+        }
 
         return pedidoModel;
     }

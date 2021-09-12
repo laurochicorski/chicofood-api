@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.RestauranteProdutoFotoController;
 import com.chicorski.chicofoodapi.api.v1.model.FotoProdutoModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.FotoProduto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class FotoProdutoModelAssembler extends RepresentationModelAssemblerSuppo
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public FotoProdutoModelAssembler() {
         super(RestauranteProdutoFotoController.class, FotoProdutoModel.class);
     }
@@ -26,11 +30,14 @@ public class FotoProdutoModelAssembler extends RepresentationModelAssemblerSuppo
     public FotoProdutoModel toModel(FotoProduto foto) {
         FotoProdutoModel fotoProdutoModel = modelMapper.map(foto, FotoProdutoModel.class);
 
-        fotoProdutoModel.add(chicoLinks.linkToFotoProduto(
-                foto.getRestauranteId(), foto.getProduto().getId()));
+        // Quem pode consultar restaurantes, também pode consultar os produtos e fotos
+        if (chicoFoodSecurity.podeConsultarRestaurantes()) {
+            fotoProdutoModel.add(chicoLinks.linkToFotoProduto(
+                    foto.getRestauranteId(), foto.getProduto().getId()));
 
-        fotoProdutoModel.add(chicoLinks.linkToProduto(
-                foto.getRestauranteId(), foto.getProduto().getId(), "produto"));
+            fotoProdutoModel.add(chicoLinks.linkToProduto(
+                    foto.getRestauranteId(), foto.getProduto().getId(), "produto"));
+        }
 
         return fotoProdutoModel;
     }

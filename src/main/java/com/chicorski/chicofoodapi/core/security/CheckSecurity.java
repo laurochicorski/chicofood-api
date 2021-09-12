@@ -28,19 +28,17 @@ public @interface CheckSecurity {
 
     public @interface Restaurantes {
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
+        @PreAuthorize("@chicoFoodSecurity.podeGerenciarCadastroRestaurantes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeGerenciarCadastro { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
-                "(hasAuthority('EDITAR_RESTAURANTES') or " +
-                "@chicoFoodSecurity.gerenciaRestaurante(#restauranteId))")
+        @PreAuthorize("@chicoFoodSecurity.podeGerenciarFuncionamentoRestaurantes(#restauranteId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeGerenciarFuncionamento { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@chicoFoodSecurity.podeConsultarRestaurantes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }
@@ -51,15 +49,13 @@ public @interface CheckSecurity {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
-                "@chicoFoodSecurity.usuarioAutenticado(returnObject.cliente.id) or" +
+                "@chicoFoodSecurity.usuarioAutenticadoIgual(returnObject.cliente.id) or" +
                 "@chicoFoodSecurity.gerenciaRestaurante(returnObject.restaurante.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeBuscar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
-                + "@chicoFoodSecurity.usuarioAutenticado(#filtro.clienteId) or"
-                + "@chicoFoodSecurity.gerenciaRestaurante(#filtro.restauranteId))")
+        @PreAuthorize("@chicoFoodSecurity.podePesquisarPedidos(#filtro.clienteId, #filtro.restauranteId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodePesquisar { }
@@ -83,7 +79,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@chicoFoodSecurity.podeConsultarFormasPagamento()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }
@@ -97,7 +93,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@chicoFoodSecurity.podeConsultarCidades()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }
@@ -111,7 +107,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         public @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@chicoFoodSecurity.podeConsultarEstados()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }
@@ -121,24 +117,24 @@ public @interface CheckSecurity {
     public @interface UsuariosGruposPermissoes {
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-                + "@chicoFoodSecurity.usuarioAutenticado(#usuarioId)")
+                + "@chicoFoodSecurity.usuarioAutenticadoIgual(#usuarioId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeAlterarPropriaSenha { }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or "
-                + "@chicoFoodSecurity.usuarioAutenticado(#usuarioId))")
+                + "@chicoFoodSecurity.usuarioAutenticadoIgual(#usuarioId))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeAlterarUsuario { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES')")
+        @PreAuthorize("@chicoFoodSecurity.podeEditarUsuariosGruposPermissoes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeEditar { }
 
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULTAR_USUARIOS_GRUPOS_PERMISSOES')")
+        @PreAuthorize("@chicoFoodSecurity.podeConsultarUsuariosGruposPermissoes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }
@@ -147,8 +143,7 @@ public @interface CheckSecurity {
 
     public @interface Estatisticas {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and "
-                + "hasAuthority('GERAR_RELATORIOS')")
+        @PreAuthorize("@chicoFoodSecurity.podeConsultarEstatisticas()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }

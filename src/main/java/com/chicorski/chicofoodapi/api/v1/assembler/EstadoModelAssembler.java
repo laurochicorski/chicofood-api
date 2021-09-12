@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.EstadoController;
 import com.chicorski.chicofoodapi.api.v1.model.EstadoModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Estado;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public EstadoModelAssembler() {
         super(EstadoController.class, EstadoModel.class);
     }
@@ -30,14 +34,21 @@ public class EstadoModelAssembler extends RepresentationModelAssemblerSupport<Es
         EstadoModel estadoModel = createModelWithId(estado.getId(), estado);
         modelMapper.map(estado, estadoModel);
 
-        estadoModel.add(chicoLinks.linkToEstados("estados"));
+        if (chicoFoodSecurity.podeConsultarEstados()) {
+            estadoModel.add(chicoLinks.linkToEstados("estados"));
+        }
 
         return estadoModel;
     }
 
     @Override
     public CollectionModel<EstadoModel> toCollectionModel(Iterable<? extends Estado> entities) {
-        return super.toCollectionModel(entities)
-                .add(chicoLinks.linkToEstados());
+        CollectionModel<EstadoModel> collectionModel = super.toCollectionModel(entities);
+
+        if (chicoFoodSecurity.podeConsultarEstados()) {
+            collectionModel.add(chicoLinks.linkToEstados());
+        }
+
+        return collectionModel;
     }
 }

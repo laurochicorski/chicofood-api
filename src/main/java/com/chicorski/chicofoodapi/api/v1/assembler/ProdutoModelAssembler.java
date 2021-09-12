@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.RestauranteProdutoController;
 import com.chicorski.chicofoodapi.api.v1.model.ProdutoModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Produto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class ProdutoModelAssembler extends RepresentationModelAssemblerSupport<P
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public ProdutoModelAssembler() {
         super(RestauranteProdutoController.class, ProdutoModel.class);
     }
@@ -29,10 +33,13 @@ public class ProdutoModelAssembler extends RepresentationModelAssemblerSupport<P
 
         modelMapper.map(produto, produtoModel);
 
-        produtoModel.add(chicoLinks.linkToProdutos(produto.getRestaurante().getId(), "produtos"));
+        if (chicoFoodSecurity.podeConsultarRestaurantes()) {
+            produtoModel.add(chicoLinks.linkToProdutos(produto.getRestaurante().getId(), "produtos"));
 
-        produtoModel.add(chicoLinks.linkToFotoProduto(
-                produto.getRestaurante().getId(), produto.getId(), "foto"));
+            produtoModel.add(chicoLinks.linkToFotoProduto(
+                    produto.getRestaurante().getId(), produto.getId(), "foto"));
+
+        }
 
         return produtoModel;
     }

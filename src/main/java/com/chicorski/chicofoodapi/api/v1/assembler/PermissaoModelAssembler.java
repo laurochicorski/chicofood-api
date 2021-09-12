@@ -2,6 +2,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.model.PermissaoModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Permissao;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class PermissaoModelAssembler implements RepresentationModelAssembler<Per
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
+
     @Override
     public PermissaoModel toModel(Permissao permissao) {
         PermissaoModel permissaoModel = modelMapper.map(permissao, PermissaoModel.class);
@@ -26,8 +31,14 @@ public class PermissaoModelAssembler implements RepresentationModelAssembler<Per
 
     @Override
     public CollectionModel<PermissaoModel> toCollectionModel(Iterable<? extends Permissao> entities) {
-        return RepresentationModelAssembler.super.toCollectionModel(entities)
-                .add(chicoLinks.linkToPermissoes());
+        CollectionModel<PermissaoModel> collectionModel
+                = RepresentationModelAssembler.super.toCollectionModel(entities);
+
+        if (chicoFoodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            collectionModel.add(chicoLinks.linkToPermissoes());
+        }
+
+        return collectionModel;
     }
 
 }

@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.CidadeController;
 import com.chicorski.chicofoodapi.api.v1.model.CidadeModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public CidadeModelAssembler() {
         super(CidadeController.class, CidadeModel.class);
     }
@@ -31,16 +35,25 @@ public class CidadeModelAssembler extends RepresentationModelAssemblerSupport<Ci
 
         modelMapper.map(cidade, cidadeModel);
 
-        cidadeModel.add(chicoLinks.linkToCidades("cidades"));
+        if (chicoFoodSecurity.podeConsultarCidades()) {
+            cidadeModel.add(chicoLinks.linkToCidades("cidades"));
+        }
 
-        cidadeModel.getEstado().add(chicoLinks.linkToEstado(cidadeModel.getEstado().getId()));
+        if (chicoFoodSecurity.podeConsultarEstados()) {
+            cidadeModel.getEstado().add(chicoLinks.linkToEstado(cidadeModel.getEstado().getId()));
+        }
 
         return cidadeModel;
     }
 
     @Override
     public CollectionModel<CidadeModel> toCollectionModel(Iterable<? extends Cidade> entities) {
-        return super.toCollectionModel(entities)
-                .add(chicoLinks.linkToCidades());
+        CollectionModel<CidadeModel> collectionModel = super.toCollectionModel(entities);
+
+        if (chicoFoodSecurity.podeConsultarCidades()) {
+            collectionModel.add(chicoLinks.linkToCidades());
+        }
+
+        return collectionModel;
     }
 }

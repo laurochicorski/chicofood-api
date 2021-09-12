@@ -5,6 +5,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.UsuarioModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.UsuarioModel;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.chicorski.chicofoodapi.core.security.CheckSecurity;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import com.chicorski.chicofoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping
@@ -37,14 +41,18 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 
         CollectionModel<UsuarioModel> usuariosModel = usuarioModelAssembler
                 .toCollectionModel(restaurante.getResponsaveis())
-                .removeLinks()
-                .add(chicoLinks.linkToRestauranteResponsaveis(restauranteId))
-                .add(chicoLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+                .removeLinks();
 
-        usuariosModel.getContent().stream().forEach(usuarioModel -> {
-            usuarioModel.add(chicoLinks.linkToRestauranteResponsavelDesassociacao(
-                    restauranteId, usuarioModel.getId(), "desassociar"));
-        });
+        if (chicoFoodSecurity.podeGerenciarCadastroRestaurantes()) {
+            usuariosModel
+                    .add(chicoLinks.linkToRestauranteResponsaveis(restauranteId))
+                    .add(chicoLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+
+            usuariosModel.getContent().stream().forEach(usuarioModel -> {
+                usuarioModel.add(chicoLinks.linkToRestauranteResponsavelDesassociacao(
+                        restauranteId, usuarioModel.getId(), "desassociar"));
+            });
+        }
 
         return usuariosModel;
     }

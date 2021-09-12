@@ -3,6 +3,7 @@ package com.chicorski.chicofoodapi.api.v1.assembler;
 import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.controller.CozinhaController;
 import com.chicorski.chicofoodapi.api.v1.model.CozinhaModel;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Cozinha;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class CozinhaModelAssembler extends RepresentationModelAssemblerSupport<C
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     public CozinhaModelAssembler() {
         super(CozinhaController.class, CozinhaModel.class);
     }
@@ -29,7 +33,9 @@ public class CozinhaModelAssembler extends RepresentationModelAssemblerSupport<C
         CozinhaModel cozinhaModel = createModelWithId(cozinha.getId(), cozinha);
         modelMapper.map(cozinha, cozinhaModel);
 
-        cozinhaModel.add(chicoLinks.linkToCozinhas("cozinhas"));
+        if (chicoFoodSecurity.podeConsultarCozinhas()) {
+            cozinhaModel.add(chicoLinks.linkToCozinhas("cozinhas"));
+        }
 
         return cozinhaModel;
     }

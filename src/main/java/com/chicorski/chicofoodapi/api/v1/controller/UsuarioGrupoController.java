@@ -5,6 +5,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.GrupoModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.GrupoModel;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.chicorski.chicofoodapi.core.security.CheckSecurity;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Usuario;
 import com.chicorski.chicofoodapi.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     @Autowired
     private ChicoLinks algaLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @Override
     @GetMapping
@@ -34,13 +38,16 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
 
         CollectionModel<GrupoModel> gruposModel = grupoModelAssembler.toCollectionModel(usuario.getGrupos())
-                .removeLinks()
-                .add(algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+                .removeLinks();
 
-        gruposModel.getContent().forEach(grupoModel -> {
-            grupoModel.add(algaLinks.linkToUsuarioGrupoDesassociacao(
-                    usuarioId, grupoModel.getId(), "desassociar"));
-        });
+        if (chicoFoodSecurity.podeEditarUsuariosGruposPermissoes()) {
+            gruposModel.add(algaLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+
+            gruposModel.getContent().forEach(grupoModel -> {
+                grupoModel.add(algaLinks.linkToUsuarioGrupoDesassociacao(
+                        usuarioId, grupoModel.getId(), "desassociar"));
+            });
+        }
 
         return gruposModel;
     }

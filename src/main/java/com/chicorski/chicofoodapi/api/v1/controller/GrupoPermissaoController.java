@@ -1,8 +1,10 @@
 package com.chicorski.chicofoodapi.api.v1.controller;
 
+import com.chicorski.chicofoodapi.api.v1.ChicoLinks;
 import com.chicorski.chicofoodapi.api.v1.assembler.PermissaoModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.PermissaoModel;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Grupo;
 import com.chicorski.chicofoodapi.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,32 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     @Autowired
     private PermissaoModelAssembler permissaoModelAssembler;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
+    @Autowired
+    private ChicoLinks chicoLinks;
+
     @GetMapping
     public CollectionModel<PermissaoModel> listar(@PathVariable Long grupoId) {
         Grupo grupo = cadastroGrupo.buscarOuFalhar(grupoId);
 
-        return permissaoModelAssembler.toCollectionModel(grupo.getPermissoes());
+        CollectionModel<PermissaoModel> permissoesModel
+                = permissaoModelAssembler.toCollectionModel(grupo.getPermissoes())
+                .removeLinks();
+
+        permissoesModel.add(chicoLinks.linkToGrupoPermissoes(grupoId));
+
+        if (chicoFoodSecurity.podeEditarUsuariosGruposPermissoes()) {
+            permissoesModel.add(chicoLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+
+            permissoesModel.getContent().forEach(permissaoModel -> {
+                permissaoModel.add(chicoLinks.linkToGrupoPermissaoDesassociacao(
+                        grupoId, permissaoModel.getId(), "desassociar"));
+            });
+        }
+
+        return permissoesModel;
     }
 
     @DeleteMapping("/{permissaoId}")

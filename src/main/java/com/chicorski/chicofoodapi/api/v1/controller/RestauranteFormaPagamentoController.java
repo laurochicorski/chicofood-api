@@ -5,6 +5,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.FormaPagamentoModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.FormaPagamentoModel;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
 import com.chicorski.chicofoodapi.core.security.CheckSecurity;
+import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.model.Restaurante;
 import com.chicorski.chicofoodapi.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     @Autowired
     private ChicoLinks chicoLinks;
 
+    @Autowired
+    private ChicoFoodSecurity chicoFoodSecurity;
+
     @CheckSecurity.Restaurantes.PodeConsultar
     @Override
     @GetMapping
@@ -34,15 +38,18 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         CollectionModel<FormaPagamentoModel> formaPagamentoModels = formaPagamentoModelAssembler.toCollectionModel(restaurante.getFormasPagamento())
-                .removeLinks()
-                .add(chicoLinks.linkToRestauranteFormasPagamento(restauranteId))
-                .add(chicoLinks.linkToRestauranteFormaPagamentoAssociacao(restauranteId, "associar"));
+                .removeLinks();
+        if (chicoFoodSecurity.podeGerenciarFuncionamentoRestaurantes(restauranteId)) {
+            formaPagamentoModels
+                    .add(chicoLinks.linkToRestauranteFormasPagamento(restauranteId))
+                    .add(chicoLinks.linkToRestauranteFormaPagamentoAssociacao(restauranteId, "associar"));
 
 
-        formaPagamentoModels.getContent().forEach(formaPagamentoModel -> {
-            formaPagamentoModel.add(chicoLinks.linkToRestauranteFormaPagamentoDesassociacao(
-                    restauranteId, formaPagamentoModel.getId(), "desassociar"));
-        });
+            formaPagamentoModels.getContent().forEach(formaPagamentoModel -> {
+                formaPagamentoModel.add(chicoLinks.linkToRestauranteFormaPagamentoDesassociacao(
+                        restauranteId, formaPagamentoModel.getId(), "desassociar"));
+            });
+        }
 
         return formaPagamentoModels;
     }
