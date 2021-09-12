@@ -1,5 +1,6 @@
 package com.chicorski.chicofoodapi.core.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.ElementType;
@@ -45,6 +46,18 @@ public @interface CheckSecurity {
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface PodeConsultar { }
+
+    }
+
+    public @interface Pedidos {
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
+                "@chicoFoodSecurity.getUsuarioId() == returnObject.cliente.id or" +
+                "@chicoFoodSecurity.gerenciaRestaurante(returnObject.restaurante.id)")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface PodeBuscar { }
 
     }
 

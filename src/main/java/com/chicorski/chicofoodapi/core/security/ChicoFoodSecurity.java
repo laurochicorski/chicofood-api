@@ -26,4 +26,5 @@ public class ChicoFoodSecurity {
     public boolean gerenciaRestaurante(Long restauranteId) {
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
+
 }

@@ -9,6 +9,7 @@ import com.chicorski.chicofoodapi.api.v1.model.input.PedidoInput;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.chicorski.chicofoodapi.core.data.PageWrapper;
 import com.chicorski.chicofoodapi.core.data.PageableTranslator;
+import com.chicorski.chicofoodapi.core.security.CheckSecurity;
 import com.chicorski.chicofoodapi.core.security.ChicoFoodSecurity;
 import com.chicorski.chicofoodapi.domain.exception.EntidadeNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
@@ -69,9 +70,10 @@ public class PedidoController implements PedidoControllerOpenApi {
         return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoModelAssembler);
     }
 
-    @GetMapping("/{codigo}")
-    public PedidoModel buscar(@PathVariable String codigo) {
-        Pedido pedido = emissaoPedido.buscarOuFalhar(codigo);
+    @CheckSecurity.Pedidos.PodeBuscar
+    @GetMapping("/{codigoPedido}")
+    public PedidoModel buscar(@PathVariable String codigoPedido) {
+        Pedido pedido = emissaoPedido.buscarOuFalhar(codigoPedido);
 
         return pedidoModelAssembler.toModel(pedido);
     }
