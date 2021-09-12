@@ -6,6 +6,7 @@ import com.chicorski.chicofoodapi.api.v1.assembler.CidadeModelAssembler;
 import com.chicorski.chicofoodapi.api.v1.model.CidadeModel;
 import com.chicorski.chicofoodapi.api.v1.model.input.CidadeInput;
 import com.chicorski.chicofoodapi.api.v1.openapi.controller.CidadeControllerOpenApi;
+import com.chicorski.chicofoodapi.core.security.CheckSecurity;
 import com.chicorski.chicofoodapi.domain.exception.EstadoNaoEncontradaException;
 import com.chicorski.chicofoodapi.domain.exception.NegocioException;
 import com.chicorski.chicofoodapi.domain.model.Cidade;
@@ -41,6 +42,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @Autowired
     private CadastroCidadeService cadastroCidade;
 
+    @CheckSecurity.Cidades.PodeConsultar
     @Deprecated
     @GetMapping
     public CollectionModel<CidadeModel> listar() {
@@ -50,6 +52,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeModelAssembler.toCollectionModel(todasCidades);
     }
 
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping("/{id}")
     public CidadeModel buscar(@PathVariable Long id) {
         Cidade cidade = cadastroCidade.buscarOuFalhar(id);
@@ -57,6 +60,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeModelAssembler.toModel(cidade);
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeModel adicionar(@RequestBody @Valid CidadeInput cidadeInput) {
@@ -76,6 +80,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{id}")
     public CidadeModel atualizar(@PathVariable Long id, @RequestBody @Valid CidadeInput cidadeInput) {
         try {
@@ -91,6 +96,7 @@ public class CidadeController implements CidadeControllerOpenApi {
         }
     }
 
+    @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{id}")
     public void remover(@PathVariable Long id) {
         cadastroCidade.excluir(id);
