@@ -57,6 +57,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private ChicoFoodSecurity chicoFoodSecurity;
 
+    @CheckSecurity.Pedidos.PodePesquisar
     @GetMapping
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro,
                                                    @PageableDefault(size=10) Pageable pageable) {
