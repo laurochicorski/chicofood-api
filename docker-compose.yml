@@ -23,3 +23,13 @@ services:
       - chicofood-network
     depends_on:
       - chicofood-mysql
+
+  chicofood-proxy:
+    build: ./ngnix
+    image: chicofood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - chicofood-network
+    depends_on:
+      - chicofood-api
