@@ -16,6 +16,7 @@ services:
 
   chicofood-api:
     image: chicofood-api
+    command: ["/wait-for-it.sh", "chicofood-mysql:3306", "-t",  "30",  "--", "java", "-jar", "api.jar"]
     environment:
       DB_HOST: chicofood-mysql
     ports:
