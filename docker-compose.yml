@@ -1,0 +1,26 @@
+version: "3.9"
+
+networks:
+  chicofood-network:
+    driver: bridge
+
+services:
+  chicofood-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    networks:
+      - chicofood-network
+
+  chicofood-api:
+    image: chicofood-api
+    environment:
+      DB_HOST: chicofood-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - chicofood-network
+    depends_on:
+      - chicofood-mysql
