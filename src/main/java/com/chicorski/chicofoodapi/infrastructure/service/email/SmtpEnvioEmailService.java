@@ -22,12 +22,12 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
     private EmailProperties emailProperties;
 
     @Autowired
-    private Configuration freemakerConfig;
+    private ProcessadorEmailTemplate processadorEmailTemplate;
 
     @Override
     public void enviar(Mensagem mensagem) {
         try {
-            String corpo = processarTemplate(mensagem);
+            String corpo = processadorEmailTemplate.processarTemplate(mensagem);
 
             MimeMessage mimeMessage = criarMimeMessage(mensagem);
 
@@ -39,7 +39,7 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
     }
 
     protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
-        String corpo = processarTemplate(mensagem);
+        String corpo = processadorEmailTemplate.processarTemplate(mensagem);
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
@@ -52,14 +52,5 @@ public class SmtpEnvioEmailService implements EnvioEmailService {
         return mimeMessage;
     }
 
-    protected String processarTemplate(Mensagem mensagem) {
-        try {
-            Template template = freemakerConfig.getTemplate(mensagem.getCorpo());
 
-            return FreeMarkerTemplateUtils.processTemplateIntoString(template,
-                    mensagem.getVariaveis());
-        } catch (Exception e) {
-            throw new EmailException("Não foi possível montar template do e-mail", e);
-        }
-    }
 }
